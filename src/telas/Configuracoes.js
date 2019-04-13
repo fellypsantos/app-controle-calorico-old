@@ -1,22 +1,45 @@
 import React, {Component} from 'react';
-import {Text, View, Button} from 'react-native';
+import { StyleSheet, Text, ScrollView, Button} from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
+
+const resetAction = StackActions.reset({
+  index: 0,
+  key: null,
+  actions: [NavigationActions.navigate({ routeName: 'Home' })],
+});
 
 export default class Configuracoes extends Component {
   static navigationOptions = {
     title: 'Configurações',
     headerLeft: null,
+    headerStyle: {
+      backgroundColor: '#7F22A7'
+    },
+    headerTintColor: '#fff'
   };
 
   render() {
     return (
-      <View>
-        <Text>Tela para alterar dados do usuário</Text>
-        <Text>É usada no primeiro acesso, e ao clicar no ícone de configurações.</Text>
-        <Button
+      <ScrollView style={styles.fundo}>
+        
+        <View>
+          <Text>Label</Text>
+          <View>
+            
+          </View>
+        </View>
+
+        {/* <Button
           title="Salvar"
-          onPress={() => { this.props.navigation.navigate('Home') }}
-        />
-      </View>
+          onPress={() => { this.props.navigation.dispatch(resetAction) }}
+        /> */}
+      </ScrollView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  fundo: {
+    backgroundColor: '#E6E6E6'
+  }
+});
