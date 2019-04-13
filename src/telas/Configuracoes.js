@@ -4,30 +4,24 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Cores from '../Cores';
 
-const resetAction = StackActions.reset({
-  index: 0,
-  key: null,
-  actions: [NavigationActions.navigate({ routeName: 'Home' })],
-});
+// const resetAction = StackActions.reset({
+//   index: 0,
+//   key: null,
+//   actions: [NavigationActions.navigate({ routeName: 'Home' })],
+// });
 
 export default class Configuracoes extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
+  static navigationOptions = {
       title: 'Configurações',
       headerLeft: null,
       headerStyle: {
         backgroundColor: '#7F22A7'
       },
       headerTintColor: '#fff',
-   }
   };
 
   _verificarDados() {
     alert('Verificar dados...');
-  }
-
-  componentDidMount() {
-    this.props.navigation.setParams({ verificarDados: this._verificarDados })
   }
 
   render() {
@@ -69,7 +63,7 @@ export default class Configuracoes extends Component {
           </View>
         </View>
 
-        <TouchableOpacity onPress={() => null} style={styles.botaoSalvar}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')} style={styles.botaoSalvar}>
           <Icon name="check" size={20} color='#fff'/>
           <Text style={styles.txtBotaoSalvar}>SALVAR</Text>
         </TouchableOpacity>

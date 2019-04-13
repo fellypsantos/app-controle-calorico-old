@@ -4,9 +4,9 @@ import Configuracoes from './src/telas/Configuracoes';
 import Home from './src/telas/Home';
 
 const AppNavigator = createStackNavigator({
-  Home: {screen: Home},
   TelaInicio: {screen: TelaInicio},
   Configuracoes: {screen: Configuracoes},
+  Home: {screen: Home},
 });
 
 export default createAppContainer(AppNavigator);
