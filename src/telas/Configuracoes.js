@@ -19,11 +19,6 @@ export default class Configuracoes extends Component {
         backgroundColor: '#7F22A7'
       },
       headerTintColor: '#fff',
-      headerRight: (
-        <TouchableOpacity onPress={navigation.getParam('verificarDados')} style={{ padding: 20 }}>
-          <Icon name="check" size={20} color='#fff'/>
-        </TouchableOpacity>
-      )
    }
   };
 
@@ -74,6 +69,11 @@ export default class Configuracoes extends Component {
           </View>
         </View>
 
+        <TouchableOpacity onPress={() => null} style={styles.botaoSalvar}>
+          <Icon name="check" size={20} color='#fff'/>
+          <Text style={styles.txtBotaoSalvar}>SALVAR</Text>
+        </TouchableOpacity>
+
         {/* <Button
           title="Salvar"
           onPress={() => { this.props.navigation.dispatch(resetAction) }}
@@ -85,7 +85,8 @@ export default class Configuracoes extends Component {
 
 const styles = StyleSheet.create({
   fundo: {
-    backgroundColor: '#E6E6E6'
+    backgroundColor: '#E6E6E6',
+    paddingBottom: 25,
   },
   inputContainer: {
     padding: 25,
@@ -121,4 +122,20 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     color: '#545454',
   },
+  botaoSalvar: {
+    backgroundColor: Cores.roxoNubank,
+    marginLeft: 25,
+    marginRight: 25,
+    marginTop: 25,
+    padding: 8,
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  txtBotaoSalvar: {
+    color: Cores.roxoClaro,
+    fontSize: 20,
+    paddingLeft: 10,
+  }
 });
