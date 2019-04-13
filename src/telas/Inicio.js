@@ -40,5 +40,5 @@ const styles = StyleSheet.create({
   txtComecar: {
     color: Cores.roxoNubank,
     fontSize: 25
-  }
+  },
 });
