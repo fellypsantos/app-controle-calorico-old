@@ -5,6 +5,11 @@ import UserInput from '../components/UserInput';
 import UserPicker from '../components/UserPicker';
 import FormStyle from '../components/FormStyle';
 
+import SQLite from 'react-native-sqlite-storage';
+
+
+let db = SQLite.openDatabase({name : 'testDB', createFromLocation : '~sqlite.db'});
+
 const SEXOS = [
   { label: 'Masculino', value: 'M' },
   { label: 'Feminino', value: 'F' }
@@ -41,6 +46,25 @@ export default class Configuracoes extends Component {
     }
 
     this.handleTextInput = this.handleTextInput.bind(this);
+  }
+
+  componentDidMount() {
+    // db.transaction((tx) => {
+    //   tx.executeSql('INSERT INTO usuario (nome, frase) VALUES(?, ?);', ['Outro Gato', 'Miaaaw'], (tx, results) => {
+    //     console.log('resultado INSERT:' , results);
+    //   })
+    // });
+
+    // db.transaction((tx) => {
+    //   tx.executeSql('SELECT * FROM usuario', [], (tx, results) => {
+    //     console.log('resultado SELECT:' , results.rows.length);
+    //     for(let i=0; i< results.rows.length; i++) {
+    //       console.log('item: ', results.rows.item(i).nome);
+    //     }
+
+    //     this.setState({ nome: results.rows.item(0).nome });
+    //   })
+    // });
   }
 
   confirmaConfiguracao() {
