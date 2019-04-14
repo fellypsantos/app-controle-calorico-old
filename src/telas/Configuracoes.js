@@ -1,16 +1,9 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, ScrollView, View, TextInput, Picker, TouchableOpacity} from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { Text, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Cores from '../Cores';
 import UserInput from '../components/UserInput';
 import UserPicker from '../components/UserPicker';
-
-// const resetAction = StackActions.reset({
-//   index: 0,
-//   key: null,
-//   actions: [NavigationActions.navigate({ routeName: 'Home' })],
-// });
+import FormStyle from '../components/FormStyle';
 
 const SEXOS = [
   { label: 'Masculino', value: 'M' },
@@ -38,6 +31,8 @@ export default class Configuracoes extends Component {
   constructor() {
     super();
     this.state = {
+      nome: 'Fellyp Karlon',
+      frase: 'Just a guy in love with codes.',
       peso: '72',
       altura: '164',
       idade: '23',
@@ -48,8 +43,42 @@ export default class Configuracoes extends Component {
     this.handleTextInput = this.handleTextInput.bind(this);
   }
 
-  _verificarDados() {
-    alert('Verificar dados...');
+  confirmaConfiguracao() {
+    Alert.alert('Quase lá.', "Salvar os dados informados?", [
+      { text: 'Cancelar', onPress: () => null, style: 'cancel'},
+      { text: 'Sim, salvar', onPress: () => {
+          Alert.alert('Ótimo!', "As informações foram salvas.", [
+            { text: 'Continuar', onPress: () => null }
+          ], { cancelable: false })
+        }
+      },
+    ]);
+  }
+
+  verificarDados() {
+    let { peso, altura, idade } = this.state;
+    let itensErrados = [];
+
+    peso = parseFloat( peso.replace(',', '.'));
+    
+    if(isNaN( peso ) || !(peso > 10 && peso <= 400)) {
+      console.log('Corrija o peso.');
+      itensErrados.push('Peso');
+    }
+
+    if (isNaN( altura ) || !( altura > 50 && altura <= 350 )) {
+      console.log('Corrija a altura.');
+      itensErrados.push('Altura');
+    }
+
+    if (isNaN( idade ) || !( idade > 6 && idade <= 150 )) {
+      console.log('Corrija a idade.');
+      itensErrados.push('Idade');
+    }
+
+    (itensErrados.length > 0)
+    ? Alert.alert('Ops! Temos um problema...', 'Corrija os campos abaixo, antes de salvar.\n\n' + itensErrados.join(', '))
+    : this.confirmaConfiguracao();
   }
 
   handleTextInput(itemState, value) {
@@ -61,10 +90,22 @@ export default class Configuracoes extends Component {
   }
 
   render() {
-    const { peso, altura, idade, sexo, fatorAtividade } = this.state;
+    const { nome, frase, peso, altura, idade, sexo, fatorAtividade } = this.state;
 
     return (
-      <ScrollView style={styles.fundo}>
+      <ScrollView style={FormStyle.fundo}>
+
+        <UserInput
+          label="Nome do perfil"
+          value={nome}
+          keyboardType="default"
+          onChangeText={(text) => this.handleTextInput("nome", text)} />
+
+        <UserInput
+          label="Sua frase de perfil"
+          value={frase}
+          keyboardType="default"
+          onChangeText={(text) => this.handleTextInput("frase", text)} />
 
         <UserInput
           label="Peso (Kg)"
@@ -96,9 +137,9 @@ export default class Configuracoes extends Component {
           options={FATOR_ATIVIDADE}
           onValueChange={(newValue) => this.handlePicker("fatorAtividade", newValue)}/>
 
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')} style={styles.botaoSalvar}>
+        <TouchableOpacity onPress={() => this.verificarDados()} style={FormStyle.botaoSalvar}>
           <Icon name="check" size={20} color='#fff'/>
-          <Text style={styles.txtBotaoSalvar}>SALVAR</Text>
+          <Text style={FormStyle.txtBotaoSalvar}>SALVAR</Text>
         </TouchableOpacity>
 
         {/* <Button
@@ -109,64 +150,3 @@ export default class Configuracoes extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  fundo: {
-    backgroundColor: '#E6E6E6',
-    paddingBottom: 50,
-  },
-  inputContainer: {
-    padding: 25,
-    paddingBottom: 0,
-  },
-  inputLabel: {
-    color: Cores.roxoNubank,
-    fontSize: 25,
-    marginBottom: 10,
-  },
-  inputArea: {
-    borderWidth: 1,
-    borderColor: '#747474',
-    backgroundColor: '#F1F1F1',
-    borderRadius: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  inputText: {
-    flex: 1,
-    fontSize: 20,
-    paddingLeft: 15,
-    color: '#545454'
-  },
-  pickerArea: {
-    borderWidth: 1,
-    borderColor: '#747474',
-    borderRadius: 5,
-    backgroundColor: '#F1F1F1',
-    paddingLeft: 15,
-    paddingRight: 15,
-    color: '#545454',
-  },
-  botaoSalvar: {
-    backgroundColor: Cores.roxoNubank,
-    marginLeft: 25,
-    marginRight: 25,
-    marginTop: 25,
-    marginBottom: 25,
-    padding: 8,
-    borderRadius: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 3
-  },
-  txtBotaoSalvar: {
-    color: Cores.roxoClaro,
-    fontSize: 20,
-    paddingLeft: 10,
-    paddingTop: 8,
-    paddingBottom: 8,
-  }
-});

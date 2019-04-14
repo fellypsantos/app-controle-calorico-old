@@ -2,6 +2,10 @@ import { StyleSheet } from 'react-native';
 import Cores from '../Cores';
 
 const FormStyle = StyleSheet.create({
+  fundo: {
+    backgroundColor: '#E6E6E6',
+    paddingBottom: 50,
+  },
   inputContainer: {
     padding: 25,
     paddingBottom: 0,
@@ -36,6 +40,26 @@ const FormStyle = StyleSheet.create({
     paddingRight: 15,
     color: '#545454',
   },
+  botaoSalvar: {
+    backgroundColor: Cores.roxoNubank,
+    marginLeft: 25,
+    marginRight: 25,
+    marginTop: 25,
+    marginBottom: 25,
+    padding: 8,
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 3
+  },
+  txtBotaoSalvar: {
+    color: Cores.roxoClaro,
+    fontSize: 20,
+    paddingLeft: 10,
+    paddingTop: 8,
+    paddingBottom: 8,
+  }
 })
 
 export default FormStyle;
