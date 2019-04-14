@@ -7,9 +7,19 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
+  Alert
 } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
 import Cores from '../Cores';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
+
+const resetAction = StackActions.reset({
+  index: 1,
+  actions: [
+    NavigationActions.navigate({ routeName: 'Home' }),
+    NavigationActions.navigate({ routeName: 'Configuracoes' }),
+  ],
+});
 
 export default class Home extends Component {
   static navigationOptions = {
@@ -30,7 +40,7 @@ export default class Home extends Component {
               <Icon5 name="door-open" size={20} color={Cores.roxoClaro}/>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => null}
+              onPress={() => this.props.navigation.dispatch(resetAction)}
               style={styles.iconeTopoArea}>
               <Icon5 name="cog" size={20} color={Cores.roxoClaro}/>
             </TouchableOpacity>
@@ -38,7 +48,7 @@ export default class Home extends Component {
 
           <View style={styles.areaPerfil}>
             <Image
-              source={require('../../assets/images/profile.jpg')}
+              source={require('../../assets/images/man.png')}
               style={styles.fotoPerfil}
             />
             <Text style={styles.nome}>Fellyp Karlon</Text>
@@ -66,12 +76,12 @@ export default class Home extends Component {
 
           <View style={styles.topoContainerBranco}>
             <Text style={styles.contadorRegistos}>Já foram anotados 12 registros hoje.</Text>
-            <TouchableOpacity onPress={() => null}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('NovoRegistro')}>
               <Icon5 name="plus-circle" size={20} color={Cores.roxoNubank}/>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity onPress={() => alert('Mostrar dados completos do registro.')}>
+          <TouchableOpacity onPress={() => Alert.alert('Detalhes', 'Mostrar completo aqui')}>
             <View style={styles.registroContainer}>
               <View style={styles.registroIconeArea}>
                 <Image source={require('../../assets/images/moon.png')} style={styles.registroIcone}/>
@@ -119,6 +129,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   fotoPerfil: {
+    backgroundColor: '#545454',
     borderWidth: 2,
     borderColor: Cores.roxoClaro,
     width: 100,

@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, ScrollView, View, TextInput, Picker, TouchableOpacity} from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+// import { StackActions, NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Cores from '../Cores';
-import UserInput from '../components/UserInput';
-import UserPicker from '../components/UserPicker';
 
 // const resetAction = StackActions.reset({
 //   index: 0,
@@ -12,22 +10,9 @@ import UserPicker from '../components/UserPicker';
 //   actions: [NavigationActions.navigate({ routeName: 'Home' })],
 // });
 
-const SEXOS = [
-  { label: 'Masculino', value: 'M' },
-  { label: 'Feminino', value: 'F' }
-]
-
-const FATOR_ATIVIDADE = [
-  { label: 'Sedentário (Pouco ou nenhum exercício)', value: 1.2 },
-  { label: 'Levemente ativo (Exercício leve, 1 a 3 dias/semana)', value: 1.375},
-  { label: 'Moderadamente ativo (Esportes 3 a 5 dias/semana)', value: 1.55},
-  { label: 'Muito ativo (Exercicio itenso 5 a 6 dias/semana)', value: 1.725 },
-  { label: 'Extremamente ativo (Exercício intenso diário)', value: 1.9}
-];
-
-export default class Configuracoes extends Component {
+export default class NovoRegistro extends Component {
   static navigationOptions = {
-      title: 'Configurações',
+      title: 'Novo Registro',
       headerLeft: null,
       headerStyle: {
         backgroundColor: '#7F22A7'
@@ -35,66 +20,40 @@ export default class Configuracoes extends Component {
       headerTintColor: '#fff',
   };
 
-  constructor() {
-    super();
-    this.state = {
-      peso: '72',
-      altura: '164',
-      idade: '23',
-      sexo: 'M',
-      fatorAtividade: '1.2'
-    }
-
-    this.handleTextInput = this.handleTextInput.bind(this);
-  }
-
   _verificarDados() {
     alert('Verificar dados...');
   }
 
-  handleTextInput(itemState, value) {
-    this.setState({ [itemState]: value });
-  }
-
-  handlePicker(itemState, newValue) {
-    this.setState({ [itemState]: newValue });
-  }
-
   render() {
-    const { peso, altura, idade, sexo, fatorAtividade } = this.state;
-
     return (
       <ScrollView style={styles.fundo}>
+        
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>O que comeu?</Text>
+          <View style={styles.inputArea}>
+            <Icon name="question-circle" size={20} color="#aaa" />
+            <TextInput style={styles.inputText} keyboardType="numeric"/>
+          </View>
+        </View>
 
-        <UserInput
-          label="Peso (Kg)"
-          value={peso}
-          keyboardType="numeric"
-          onChangeText={(text) => this.handleTextInput("peso", text)} />
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Quantas calorias?</Text>
+          <View style={styles.inputArea}>
+            <Icon name="question-circle" size={20} color="#aaa" />
+            <TextInput style={styles.inputText} keyboardType="numeric"/>
+          </View>
+        </View>
 
-        <UserInput
-          label="Altura (cm)"
-          value={altura}
-          keyboardType="numeric"
-          onChangeText={(text) => this.handleTextInput("altura", text)} />
-
-        <UserInput
-          label="Idade"
-          value={idade}
-          keyboardType="numeric"
-          onChangeText={(text) => this.handleTextInput("idade", text)} />
-
-        <UserPicker
-          label="Sexo"
-          value={sexo}
-          options={SEXOS}
-          onValueChange={(newValue) => this.handlePicker("sexo", newValue)}/>
-
-          <UserPicker
-          label="O que se considera?"
-          value={fatorAtividade}
-          options={FATOR_ATIVIDADE}
-          onValueChange={(newValue) => this.handlePicker("fatorAtividade", newValue)}/>
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Como classificaria?</Text>
+          <View style={styles.pickerArea}>
+            <Picker selectedValue="Alimentação leve">
+              <Picker.Item label="Alimentação leve" value="Alimentação leve"/>
+              <Picker.Item label="Alimentação moderada" value="Alimentação moderada"/>
+              <Picker.Item label="Alimentação pesada" value="Alimentação pesada"/>
+            </Picker>
+          </View>
+        </View>
 
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')} style={styles.botaoSalvar}>
           <Icon name="check" size={20} color='#fff'/>
