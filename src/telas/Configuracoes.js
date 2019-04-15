@@ -5,18 +5,14 @@ import UserInput from '../components/UserInput';
 import UserPicker from '../components/UserPicker';
 import FormStyle from '../components/FormStyle';
 
-import SQLite from 'react-native-sqlite-storage';
+import DataBase from '../DataBase'
 
-
-let db = SQLite.openDatabase({name : 'appDB', createFromLocation : '~dados.sqlite'},
-  () => console.log('Abrido com sucesso hihi'),
-  (err) => console.log('Erro ao abrir: ', err),
-);
+let db = DataBase.open();
 
 const SEXOS = [
   { label: 'Masculino', value: 'M' },
   { label: 'Feminino', value: 'F' }
-]
+];
 
 const FATOR_ATIVIDADE = [
   { label: 'Sedentário (Pouco ou nenhum exercício)', value: 1.2 },
@@ -25,6 +21,7 @@ const FATOR_ATIVIDADE = [
   { label: 'Muito ativo (Exercicio itenso 5 a 6 dias/semana)', value: 1.725 },
   { label: 'Extremamente ativo (Exercício intenso diário)', value: 1.9}
 ];
+
 
 export default class Configuracoes extends Component {
   static navigationOptions = {
@@ -65,8 +62,8 @@ export default class Configuracoes extends Component {
 
   atualizarStateDataBase() {
     db.transaction((tx) => {
-      tx.executeSql('SELECT * FROM perfil', [], (tx, results) => {
-        if ( results.rows.length ) {
+      tx.executeSql('SELECT * FROM perfil WHERE id = ?', [1], (tx, results) => {
+        if ( results.rows.item(0).last_run !== null ) {
           console.log('Já existe configuração, carregar...');
           let dadosUsuario = results.rows.item(0);
 
@@ -125,8 +122,8 @@ export default class Configuracoes extends Component {
 
   salvarDataBase() {
     const { nome, frase, peso, altura, idade, sexo, fatorAtividade } = this.state;
-    const sql = 'UPDATE perfil SET nome=?, frase=?, peso=?, altura=?, idade=?, sexo=?, fator_atividade=? WHERE id=?';
-    const values = [nome, frase, peso, altura, idade, sexo, fatorAtividade, 1];
+    const sql = 'UPDATE perfil SET nome=?, frase=?, peso=?, altura=?, idade=?, sexo=?, fator_atividade=?, last_run=? WHERE id=?';
+    const values = [nome, frase, peso, altura, idade, sexo, fatorAtividade, new Date().getTime(), 1];
     db.transaction((tx) => {
       tx.executeSql(sql, values, (tx, results) => {
         console.log('resultado salvarDataBase: ', results);

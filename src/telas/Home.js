@@ -12,12 +12,15 @@ import {
 import { StackActions, NavigationActions } from 'react-navigation';
 import Cores from '../Cores';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
+import DataBase from '../DataBase'
+
+let db = DataBase.open();
 
 const resetAction = StackActions.reset({
   index: 1,
   actions: [
     NavigationActions.navigate({ routeName: 'Home' }),
-    NavigationActions.navigate({ routeName: 'Configuracoes' }),
+    NavigationActions.navigate({ routeName: 'Configuracoes' }, ),
   ],
 });
 
@@ -26,7 +29,65 @@ export default class Home extends Component {
     header: null
   };
 
+  constructor() {
+    super();
+    this.state = {
+      nome: '',
+      frase: '',
+      peso: '',
+      altura: '',
+      idade: '',
+      sexo: 'M',
+      fatorAtividade: '1.2',
+    }
+
+    // this.willFocusSubscribe = this.props.navigation.addListener('didFocus', payload => {
+    //   console.log('hue');
+    // })
+
+    this.atualizarStateDatabase = this.atualizarStateDatabase.bind(this);
+  }
+
+  atualizarStateDatabase() {
+    // this.props.navigation.setParams({ deveAtualizar: false });
+    // return false;
+    db.transaction((tx) => {
+      tx.executeSql('SELECT * FROM perfil WHERE id = ?', [1], (tx, results) => {
+        if ( results.rows.item(0).last_run !== null ) {
+          console.log('Já existe configuração, carregar...');
+          let dadosUsuario = results.rows.item(0);
+
+          this.setState({
+            nome: dadosUsuario.nome,
+            frase: dadosUsuario.frase,
+            peso: dadosUsuario.peso.toString(),
+            altura: dadosUsuario.altura.toString(),
+            idade: dadosUsuario.idade.toString(),
+            sexo: dadosUsuario.sexo,
+            fatorAtividade: dadosUsuario.fator_atividade,
+          });
+        }
+      })
+    });
+  }
+
+  componentDidMount() {
+    this.atualizarStateDatabase();
+
+    console.log('montado');
+
+    const didBlurSubscription = this.props.navigation.addListener(
+      'willFocus',
+      payload => {
+        console.log('pegar dados do DB novamente');
+        this.atualizarStateDatabase();
+      }
+    );
+  }
+
   render() {
+    const { nome, frase, peso, altura, idade, sexo, fatorAtividade } = this.state;
+
     return (
       <ScrollView style={styles.container}>
 
@@ -51,7 +112,7 @@ export default class Home extends Component {
               source={require('../../assets/images/man.png')}
               style={styles.fotoPerfil}
             />
-            <Text style={styles.nome}>Fellyp Karlon</Text>
+            <Text style={styles.nome}>{ nome }</Text>
             <Text style={styles.frase}>Just a guy in love with codes.</Text>
           </View>
 
