@@ -1,30 +1,39 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, ScrollView, View, TextInput, Picker, TouchableOpacity} from 'react-native';
-// import { StackActions, NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Cores from '../Cores';
 
-// const resetAction = StackActions.reset({
-//   index: 0,
-//   key: null,
-//   actions: [NavigationActions.navigate({ routeName: 'Home' })],
-// });
+const pickerOptions = [
+  { nome : 'Alimentação leve' },
+  { nome : 'Alimentação moderada' },
+  { nome : 'Alimentação pesada' },
+]
 
 export default class NovoRegistro extends Component {
   static navigationOptions = {
       title: 'Novo Registro',
-      headerLeft: null,
       headerStyle: {
         backgroundColor: '#7F22A7'
       },
       headerTintColor: '#fff',
   };
 
-  _verificarDados() {
+  constructor() {
+    super();
+    this.state = {
+      nomeAlimento: '',
+      totalKcal: '',
+      classificacao: '',
+    }
+  }
+
+  verificarDados() {
     alert('Verificar dados...');
   }
 
   render() {
+    const { nomeAlimento, totalKcal, classificacao } = this.state;
+
     return (
       <ScrollView style={styles.fundo}>
         
@@ -32,7 +41,12 @@ export default class NovoRegistro extends Component {
           <Text style={styles.inputLabel}>O que comeu?</Text>
           <View style={styles.inputArea}>
             <Icon name="question-circle" size={20} color="#aaa" />
-            <TextInput style={styles.inputText} keyboardType="numeric"/>
+            <TextInput
+              style={styles.inputText}
+              keyboardType="default"
+              value={nomeAlimento}
+              onChangeText={(text) => this.setState({ nomeAlimento: text })}
+            />
           </View>
         </View>
 
@@ -40,7 +54,12 @@ export default class NovoRegistro extends Component {
           <Text style={styles.inputLabel}>Quantas calorias?</Text>
           <View style={styles.inputArea}>
             <Icon name="question-circle" size={20} color="#aaa" />
-            <TextInput style={styles.inputText} keyboardType="numeric"/>
+            <TextInput
+              style={styles.inputText}
+              keyboardType="numeric"
+              value={totalKcal}
+              onChangeText={(text) => this.setState({ totalKcal: text })}
+            />
           </View>
         </View>
 
@@ -48,22 +67,18 @@ export default class NovoRegistro extends Component {
           <Text style={styles.inputLabel}>Como classificaria?</Text>
           <View style={styles.pickerArea}>
             <Picker selectedValue="Alimentação leve">
-              <Picker.Item label="Alimentação leve" value="Alimentação leve"/>
-              <Picker.Item label="Alimentação moderada" value="Alimentação moderada"/>
-              <Picker.Item label="Alimentação pesada" value="Alimentação pesada"/>
+              {
+                pickerOptions.map(item => <Picker.Item label={item.nome} value={item.nome}/>)
+              }
             </Picker>
           </View>
         </View>
 
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')} style={styles.botaoSalvar}>
+        <TouchableOpacity onPress={() => this.verificarDados()} style={styles.botaoSalvar}>
           <Icon name="check" size={20} color='#fff'/>
           <Text style={styles.txtBotaoSalvar}>SALVAR</Text>
         </TouchableOpacity>
-
-        {/* <Button
-          title="Salvar"
-          onPress={() => { this.props.navigation.dispatch(resetAction) }}
-        /> */}
+        
       </ScrollView>
     );
   }

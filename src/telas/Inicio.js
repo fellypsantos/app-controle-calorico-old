@@ -4,7 +4,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import Cores from '../Cores';
 import DataBase from '../DataBase';
 
-let db = DataBase.open();
+DataBase.open();
 
 const resetAction = StackActions.reset({
   index: 0,
@@ -26,20 +26,16 @@ export default class Inicio extends Component {
   }
 
   componentDidMount() {
-    db.transaction((tx) => {
-      tx.executeSql('SELECT * FROM perfil WHERE id = ?', [1], (tx, results) => {
-        if ( results.rows.length ) {
-          console.log('Dados de perfil encontrados', results.rows.item(0));
-          if ( results.rows.item(0).last_run !== null ) {
-            // console.log('Pular pra home, pois já tem dados no perfil.');
-            this.props.navigation.dispatch(resetAction);
-          }
-          else {
-            // console.log('Ir para config criar um perfil.');
-            this.setState({ verificandoDados: false });
-          }
+    DataBase.getDadosPerfil((results) => {
+      if ( results.rows.length ) {
+        console.log('Dados de perfil encontrados', results.rows.item(0));
+        if ( results.rows.item(0).last_run !== null ) {
+          this.props.navigation.dispatch(resetAction);  // pular pra Home
         }
-      })
+        else {          
+          this.setState({ verificandoDados: false });   // mostrar o botão Começar
+        }
+      }
     });
   }
 

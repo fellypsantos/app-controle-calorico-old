@@ -14,7 +14,7 @@ import Cores from '../Cores';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import DataBase from '../DataBase'
 
-let db = DataBase.open();
+DataBase.open();
 
 const resetAction = StackActions.reset({
   index: 1,
@@ -39,54 +39,57 @@ export default class Home extends Component {
       idade: '',
       sexo: 'M',
       fatorAtividade: '1.2',
+      gastoEnergeticoTotalDiario: 0,
+      registros: [],
     }
 
-    // this.willFocusSubscribe = this.props.navigation.addListener('didFocus', payload => {
-    //   console.log('hue');
-    // })
-
-    this.atualizarStateDatabase = this.atualizarStateDatabase.bind(this);
+    this.atualizarStateDataBase = this.atualizarStateDataBase.bind(this);
+    this.calcGastoEnergeticoBasal = this.calcGastoEnergeticoBasal.bind(this);
   }
 
-  atualizarStateDatabase() {
-    // this.props.navigation.setParams({ deveAtualizar: false });
-    // return false;
-    db.transaction((tx) => {
-      tx.executeSql('SELECT * FROM perfil WHERE id = ?', [1], (tx, results) => {
-        if ( results.rows.item(0).last_run !== null ) {
-          console.log('Já existe configuração, carregar...');
-          let dadosUsuario = results.rows.item(0);
+  calcGastoEnergeticoBasal() {
+    const { peso, altura, idade, sexo, fatorAtividade } = this.state;
+    let tmb = (sexo === 'M')
+    ? (((13.75 * peso) + (5 * altura) - (6.76 * idade)) + 66.5)
+    : (((9.56 * peso) + (1.85 * altura) - (4.68 * idade)) + 665)
 
-          this.setState({
-            nome: dadosUsuario.nome,
-            frase: dadosUsuario.frase,
-            peso: dadosUsuario.peso.toString(),
-            altura: dadosUsuario.altura.toString(),
-            idade: dadosUsuario.idade.toString(),
-            sexo: dadosUsuario.sexo,
-            fatorAtividade: dadosUsuario.fator_atividade,
-          });
-        }
-      })
+    tmb *= parseFloat(fatorAtividade);
+
+    console.log("Basto Energético Basal: ", tmb);
+    this.setState({
+      gastoEnergeticoTotalDiario: parseInt(tmb),
+    })
+  }
+
+  atualizarStateDataBase() {
+    DataBase.getDadosPerfil((results) => {
+      if ( results.rows.item(0).last_run !== null ) {
+        // já existe configuração, carregar...
+        const perfil = results.rows.item(0);
+        DataBase.updateComponentState(perfil, this);
+        this.calcGastoEnergeticoBasal();
+      }
     });
   }
 
   componentDidMount() {
-    this.atualizarStateDatabase();
-
-    console.log('montado');
+    this.atualizarStateDataBase();
 
     const didBlurSubscription = this.props.navigation.addListener(
       'willFocus',
       payload => {
         console.log('pegar dados do DB novamente');
-        this.atualizarStateDatabase();
+        this.atualizarStateDataBase();
       }
     );
+
+    DataBase.getRegistros(null, results => {
+      console.log('registros', results);
+    });
   }
 
   render() {
-    const { nome, frase, peso, altura, idade, sexo, fatorAtividade } = this.state;
+    const { nome, frase, peso, altura, idade, sexo, fatorAtividade, gastoEnergeticoTotalDiario } = this.state;
 
     return (
       <ScrollView style={styles.container}>
@@ -109,11 +112,15 @@ export default class Home extends Component {
 
           <View style={styles.areaPerfil}>
             <Image
-              source={require('../../assets/images/man.png')}
+              source={
+                (sexo == 'M')
+                ? require('../../assets/images/man.png')
+                : require('../../assets/images/girl.png')
+              }
               style={styles.fotoPerfil}
             />
             <Text style={styles.nome}>{ nome }</Text>
-            <Text style={styles.frase}>Just a guy in love with codes.</Text>
+            <Text style={styles.frase}>{ frase }</Text>
           </View>
 
           <View style={styles.containerContadorCalorias}>
@@ -122,12 +129,12 @@ export default class Home extends Component {
               <Text style={styles.labelContadorCalorias}>Mínimo</Text>
             </View>
             <View style={[styles.containerInfoCalorias, styles.containerInfoCaloriasCentro]}>
-            <Text style={[styles.numeroCalorias, styles.totalConsumido]}>1714</Text>
+            <Text style={[styles.numeroCalorias, styles.totalConsumido]}>0</Text>
             <Text style={styles.labelContadorCalorias}>Consumido (Kcal)</Text>
             </View>
             <View style={styles.containerInfoCalorias}>
-              <Text style={styles.numeroCalorias}>2150</Text>
-              <Text style={styles.labelContadorCalorias}>Mínimo</Text>
+              <Text style={styles.numeroCalorias}>{ gastoEnergeticoTotalDiario }</Text>
+              <Text style={styles.labelContadorCalorias}>Máximo</Text>
             </View>
           </View>
         </View>
@@ -155,11 +162,6 @@ export default class Home extends Component {
               <Icon5 name='smile' size={15} color={Cores.roxoNubank}/>
             </View>
           </TouchableOpacity>
-
-          {/* <View style={styles.areaNenhumRegistro}>
-            <Icon5 name='mug-hot' size={30} />
-            <Text style={styles.txtNenhumRegistro}>Nada até o momento.</Text>
-          </View> */}
 
         </View>
       </ScrollView>
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   fotoPerfil: {
-    backgroundColor: '#545454',
+    backgroundColor: '#F6F6F5',
     borderWidth: 2,
     borderColor: Cores.roxoClaro,
     width: 100,
