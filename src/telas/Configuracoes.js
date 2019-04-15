@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Text, ScrollView, TouchableOpacity, Alert} from 'react-native';
+import { Text, ScrollView, TouchableOpacity, Alert, Button} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import UserInput from '../components/UserInput';
 import UserPicker from '../components/UserPicker';
@@ -8,7 +8,10 @@ import FormStyle from '../components/FormStyle';
 import SQLite from 'react-native-sqlite-storage';
 
 
-let db = SQLite.openDatabase({name : 'testDB', createFromLocation : '~sqlite.db'});
+let db = SQLite.openDatabase({name : 'appDB', createFromLocation : '~dados.sqlite'},
+  () => console.log('Abrido com sucesso hihi'),
+  (err) => console.log('Erro ao abrir: ', err),
+);
 
 const SEXOS = [
   { label: 'Masculino', value: 'M' },
@@ -36,16 +39,18 @@ export default class Configuracoes extends Component {
   constructor() {
     super();
     this.state = {
-      nome: 'Fellyp Karlon',
-      frase: 'Just a guy in love with codes.',
-      peso: '72',
-      altura: '164',
-      idade: '23',
+      nome: '',
+      frase: '',
+      peso: '',
+      altura: '',
+      idade: '',
       sexo: 'M',
       fatorAtividade: '1.2'
     }
 
     this.handleTextInput = this.handleTextInput.bind(this);
+    this.atualizarStateDataBase = this.atualizarStateDataBase.bind(this);
+    // this.salvarDataBase = this.salvarDataBase.bind(this);
   }
 
   componentDidMount() {
@@ -55,35 +60,48 @@ export default class Configuracoes extends Component {
     //   })
     // });
 
-    // db.transaction((tx) => {
-    //   tx.executeSql('SELECT * FROM usuario', [], (tx, results) => {
-    //     console.log('resultado SELECT:' , results.rows.length);
-    //     for(let i=0; i< results.rows.length; i++) {
-    //       console.log('item: ', results.rows.item(i).nome);
-    //     }
-
-    //     this.setState({ nome: results.rows.item(0).nome });
-    //   })
-    // });
+    this.atualizarStateDataBase();
   }
 
-  confirmaConfiguracao() {
-    Alert.alert('Quase lá.', "Salvar os dados informados?", [
-      { text: 'Cancelar', onPress: () => null, style: 'cancel'},
-      { text: 'Sim, salvar', onPress: () => {
-          Alert.alert('Ótimo!', "As informações foram salvas.", [
-            { text: 'Continuar', onPress: () => null }
-          ], { cancelable: false })
+  atualizarStateDataBase() {
+    db.transaction((tx) => {
+      tx.executeSql('SELECT * FROM perfil', [], (tx, results) => {
+        if ( results.rows.length ) {
+          console.log('Já existe configuração, carregar...');
+          let dadosUsuario = results.rows.item(0);
+
+          this.setState({
+            nome: dadosUsuario.nome,
+            frase: dadosUsuario.frase,
+            peso: dadosUsuario.peso.toString(),
+            altura: dadosUsuario.altura.toString(),
+            idade: dadosUsuario.idade.toString(),
+            sexo: dadosUsuario.sexo,
+            fatorAtividade: dadosUsuario.fator_atividade,
+          });
         }
-      },
-    ]);
+        else {
+          console.log('Perfil vazio.');
+        }
+      })
+    });
   }
-
+  
   verificarDados() {
-    let { peso, altura, idade } = this.state;
+    let { nome, frase, peso, altura, idade } = this.state;
     let itensErrados = [];
-
+    
     peso = parseFloat( peso.replace(',', '.'));
+
+    if(nome.length == 0) {
+      console.log('Nome vazio.');
+      itensErrados.push('Nome');
+    }
+
+    if(frase.length == 0) {
+      console.log('Frase vazia.');
+      itensErrados.push('Frase');
+    }
     
     if(isNaN( peso ) || !(peso > 10 && peso <= 400)) {
       console.log('Corrija o peso.');
@@ -105,6 +123,30 @@ export default class Configuracoes extends Component {
     : this.confirmaConfiguracao();
   }
 
+  salvarDataBase() {
+    const { nome, frase, peso, altura, idade, sexo, fatorAtividade } = this.state;
+    const sql = 'UPDATE perfil SET nome=?, frase=?, peso=?, altura=?, idade=?, sexo=?, fator_atividade=? WHERE id=?';
+    const values = [nome, frase, peso, altura, idade, sexo, fatorAtividade, 1];
+    db.transaction((tx) => {
+      tx.executeSql(sql, values, (tx, results) => {
+        console.log('resultado salvarDataBase: ', results);
+        Alert.alert('Ótimo!', "As informações foram salvas.", [
+          { text: 'Continuar', onPress: () => this.props.navigation.navigate('Home') }
+        ], { cancelable: false })
+      });
+    });
+  }
+
+  confirmaConfiguracao() {
+    Alert.alert('Quase lá.', "Salvar os dados informados?", [
+      { text: 'Cancelar', onPress: () => null, style: 'cancel'},
+      { text: 'Sim, salvar', onPress: () => {
+        this.salvarDataBase();
+        }
+      },
+    ]);
+  }
+
   handleTextInput(itemState, value) {
     this.setState({ [itemState]: value });
   }
@@ -118,6 +160,44 @@ export default class Configuracoes extends Component {
 
     return (
       <ScrollView style={FormStyle.fundo}>
+
+        <Button title="INSERT" onPress={() => {
+          const sql = 'INSERT INTO perfil(nome, frase, foto, peso, altura, idade, sexo, fator_atividade) VALUES(?,?,?,?,?,?,?,?)';
+          const values = ['Lyp', 'uma frase marcante', 'base64fotoData', 72.5, 164, 23, 'M', 1.375];
+
+          db.transaction((tx) => {
+            tx.executeSql(sql, values, (tx, results) => {
+              console.log('resultado INSERT: ', results);
+
+              this.atualizarStateDataBase();
+            })
+          });
+        }}/>
+
+        <Button title="UPDATE" onPress={() => {
+          const sql = 'UPDATE perfil SET nome = ?, fator_atividade = ? WHERE id = ?';
+          const values = ['Fellyp Karlon', 1.2, 1];
+
+          db.transaction((tx) => {
+            tx.executeSql(sql, values, (tx, results) => {
+              console.log('resultado UPDATE: ', results);
+              this.atualizarStateDataBase();
+            })
+          });
+        }}/>
+
+        <Button title="CLEAR TABLE" onPress={() => {
+
+          const sql = 'UPDATE perfil SET nome=?, frase=?, peso=?, altura=?, idade=?, sexo=?, fator_atividade=? WHERE id=?';
+          const values = ['', '', 0, 0, 0, 'M', 1.2, 1];
+
+          db.transaction((tx) => {
+            tx.executeSql(sql, values, (tx, results) => {
+              console.log('resultado CLEAR TABLE: ', results);
+            });
+          });
+        }}/>
+        
 
         <UserInput
           label="Nome do perfil"

@@ -5,8 +5,8 @@ import Home from './src/telas/Home';
 import NovoRegistro from './src/telas/NovoRegistro';
 
 const AppNavigator = createStackNavigator({
-  Configuracoes: {screen: Configuracoes},
   TelaInicio: {screen: TelaInicio},
+  Configuracoes: {screen: Configuracoes},
   Home: {screen: Home},
   NovoRegistro: {screen: NovoRegistro},
 });
