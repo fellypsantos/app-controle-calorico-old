@@ -83,7 +83,12 @@ export default class Home extends Component {
   }
 
   atualizarRegistros() {
-    DataBase.getRegistros(null, results => {
+
+    let hoje = moment();
+    const timestamp_inicio = hoje.set({ hour: 0, minute: 0, second: 0, millisecond: 0}).toDate().getTime();
+    const timestamp_fim = hoje.set({ hour: 23, minute: 59, second: 59, millisecond: 999}).toDate().getTime();
+
+    DataBase.getRegistros(timestamp_inicio, timestamp_fim, results => {
       const total = results.rows.length;
       let registrosDB = [];
       let totalKcalConsumidoHoje = 0;
@@ -115,7 +120,7 @@ export default class Home extends Component {
   }
 
   render() {
-    const { nome, frase, peso, altura, idade, sexo, totalKcalHoje, fatorAtividade, gastoEnergeticoTotalDiario, registros } = this.state;
+    const { nome, frase, sexo, totalKcalHoje, gastoEnergeticoTotalDiario, registros } = this.state;
 
     return (
       <ScrollView style={styles.container}>
@@ -178,20 +183,6 @@ export default class Home extends Component {
               <Icon5 name="plus-circle" size={20} color={Cores.roxoNubank}/>
             </TouchableOpacity>
           </View>
-
-          {/* <TouchableOpacity onPress={() => Alert.alert('Detalhes', 'Mostrar completo aqui')}>
-            <View style={styles.registroContainer}>
-              <View style={styles.registroIconeArea}>
-                <Image source={require('../../assets/images/moon.png')} style={styles.registroIcone}/>
-              </View>
-              <View style={styles.registroDados}>
-                <Text style={styles.nomeAlimento} numberOfLines={1}>Carne assada de panela + açaí bem pirão adubado</Text>
-                <Text style={styles.subInfo}>Alimentação | 22h34</Text>
-                <Text style={styles.subInfo}>594 kcal</Text>
-              </View>
-              <Icon5 name='smile' size={15} color={Cores.roxoNubank}/>
-            </View>
-          </TouchableOpacity> */}
 
           <FlatList
             inverted

@@ -132,10 +132,6 @@ export default class NovoRegistro extends Component {
           <Icon name="check" size={20} color='#fff'/>
           <Text style={styles.txtBotaoSalvar}>SALVAR</Text>
         </TouchableOpacity>
-
-        <Text>{ nomeAlimento }</Text>
-        <Text>{ totalKcal }</Text>
-        <Text>{ classificacao }</Text>
         
       </ScrollView>
     );

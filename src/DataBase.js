@@ -56,11 +56,13 @@ export default class DataBase {
     });
   }
 
-  static getRegistros(filtro, callback) {
-    const sql = 'SELECT * FROM registros';
+  static getRegistros(ts_inicial, ts_final, callback) {
+
+    const sql = 'SELECT * FROM registros WHERE timestamp BETWEEN ? AND ?';
+    const values = [ts_inicial, ts_final];
 
     this.db.transaction((tx) => {
-      tx.executeSql(sql, [], (tx, results) => {
+      tx.executeSql(sql, values, (tx, results) => {
         callback(results);
       });
     });
