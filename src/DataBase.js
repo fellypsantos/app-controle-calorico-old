@@ -45,6 +45,17 @@ export default class DataBase {
     });
   }
 
+  static addRegistro(registro, callback) {
+    const sql = 'INSERT INTO registros (titulo, tipo, timestamp, kcal, icone) VALUES (?,?,?,?,?)';
+    const values = [registro.titulo, registro.tipo, registro.timestamp, registro.kcal, registro.icone];
+
+    this.db.transaction((tx) => {
+      tx.executeSql(sql, values, (tx, results) => {
+        callback(results);
+      });
+    });
+  }
+
   static getRegistros(filtro, callback) {
     const sql = 'SELECT * FROM registros';
 

@@ -7,9 +7,11 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
-  Alert
+  Alert,
+  FlatList,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
+import moment from 'moment';
 import Cores from '../Cores';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import DataBase from '../DataBase'
@@ -23,6 +25,12 @@ const resetAction = StackActions.reset({
     NavigationActions.navigate({ routeName: 'Configuracoes' }, ),
   ],
 });
+
+let icones = Array();
+
+icones['sunrise'] = require('../../assets/images/sunrise.png');
+icones['sun'] = require('../../assets/images/sun.png');
+icones['moon'] = require('../../assets/images/moon.png');
 
 export default class Home extends Component {
   static navigationOptions = {
@@ -38,6 +46,7 @@ export default class Home extends Component {
       altura: '',
       idade: '',
       sexo: 'M',
+      totalKcalHoje: 0,
       fatorAtividade: '1.2',
       gastoEnergeticoTotalDiario: 0,
       registros: [],
@@ -45,6 +54,7 @@ export default class Home extends Component {
 
     this.atualizarStateDataBase = this.atualizarStateDataBase.bind(this);
     this.calcGastoEnergeticoBasal = this.calcGastoEnergeticoBasal.bind(this);
+    this.atualizarRegistros = this.atualizarRegistros.bind(this);
   }
 
   calcGastoEnergeticoBasal() {
@@ -72,24 +82,40 @@ export default class Home extends Component {
     });
   }
 
+  atualizarRegistros() {
+    DataBase.getRegistros(null, results => {
+      const total = results.rows.length;
+      let registrosDB = [];
+      let totalKcalConsumidoHoje = 0;
+
+      if (total) {
+        for(let i=0; i < total; i++) {
+          registrosDB.push(results.rows.item(i));
+          totalKcalConsumidoHoje += results.rows.item(i).kcal;
+        }
+
+        this.setState({
+          registros: registrosDB,
+          totalKcalHoje: totalKcalConsumidoHoje,
+        });
+      }
+    });
+  }
+
   componentDidMount() {
     this.atualizarStateDataBase();
 
     const didBlurSubscription = this.props.navigation.addListener(
       'willFocus',
       payload => {
-        console.log('pegar dados do DB novamente');
         this.atualizarStateDataBase();
+        this.atualizarRegistros();
       }
-    );
-
-    DataBase.getRegistros(null, results => {
-      console.log('registros', results);
-    });
+    ); 
   }
 
   render() {
-    const { nome, frase, peso, altura, idade, sexo, fatorAtividade, gastoEnergeticoTotalDiario } = this.state;
+    const { nome, frase, peso, altura, idade, sexo, totalKcalHoje, fatorAtividade, gastoEnergeticoTotalDiario, registros } = this.state;
 
     return (
       <ScrollView style={styles.container}>
@@ -129,7 +155,7 @@ export default class Home extends Component {
               <Text style={styles.labelContadorCalorias}>Mínimo</Text>
             </View>
             <View style={[styles.containerInfoCalorias, styles.containerInfoCaloriasCentro]}>
-            <Text style={[styles.numeroCalorias, styles.totalConsumido]}>0</Text>
+            <Text style={[styles.numeroCalorias, styles.totalConsumido]}>{ totalKcalHoje }</Text>
             <Text style={styles.labelContadorCalorias}>Consumido (Kcal)</Text>
             </View>
             <View style={styles.containerInfoCalorias}>
@@ -143,13 +169,17 @@ export default class Home extends Component {
         <View style={styles.containerBranco}>
 
           <View style={styles.topoContainerBranco}>
-            <Text style={styles.contadorRegistos}>Já foram anotados 12 registros hoje.</Text>
+            {
+              (registros.length > 0)
+              ? <Text style={styles.contadorRegistos}>Já foram anotados { registros.length } registros hoje.</Text>
+              : <Text></Text>
+            }
             <TouchableOpacity onPress={() => this.props.navigation.navigate('NovoRegistro')}>
               <Icon5 name="plus-circle" size={20} color={Cores.roxoNubank}/>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity onPress={() => Alert.alert('Detalhes', 'Mostrar completo aqui')}>
+          {/* <TouchableOpacity onPress={() => Alert.alert('Detalhes', 'Mostrar completo aqui')}>
             <View style={styles.registroContainer}>
               <View style={styles.registroIconeArea}>
                 <Image source={require('../../assets/images/moon.png')} style={styles.registroIcone}/>
@@ -161,7 +191,39 @@ export default class Home extends Component {
               </View>
               <Icon5 name='smile' size={15} color={Cores.roxoNubank}/>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+          <FlatList
+            inverted
+            data={registros}
+            extraData={this.state}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => {Alert.alert('Detalhes', 'detalhes')}}>
+                <View style={styles.registroContainer}>
+                  <View style={styles.registroIconeArea}>
+                    <Image source={icones[item.icone]} style={styles.registroIcone}/>
+                  </View>
+                  <View style={styles.registroDados}>
+                    <Text style={styles.nomeAlimento} numberOfLines={1}>{ item.titulo }</Text>
+                    <Text style={styles.subInfo}>{item.tipo} | { moment(item.timestamp).format('HH\\h mm').replace(' ', '') }</Text>
+                    <Text style={styles.subInfo}>{item.kcal} kcal</Text>
+                  </View>
+                  <Icon5 name='smile' size={15} color={Cores.roxoNubank}/>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+
+          {
+            (registros.length == 0)
+            && (
+              <View style={styles.areaNenhumRegistro}>
+                <Icon5 name="mug-hot" size={30} />
+                <Text style={styles.txtNenhumRegistro}>Nenhum registro até agora.</Text>
+              </View>
+            )
+          }
 
         </View>
       </ScrollView>
@@ -300,9 +362,14 @@ const styles = StyleSheet.create({
   areaNenhumRegistro: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    padding: 30,
   },
   txtNenhumRegistro: {
-    padding: 20,
-  }
+    fontFamily: 'Open Sans Regular',
+    fontSize: 15,
+    padding: 15,
+    marginTop: 5,
+  },
+
+
 });

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, ScrollView, View, TextInput, Picker, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, ScrollView, View, TextInput, Picker, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Cores from '../Cores';
+import DataBase from '../DataBase';
 
 const pickerOptions = [
   { nome : 'Alimentação leve' },
@@ -23,12 +24,62 @@ export default class NovoRegistro extends Component {
     this.state = {
       nomeAlimento: '',
       totalKcal: '',
-      classificacao: '',
+      classificacao: pickerOptions[0].nome,
     }
   }
 
+  getIcone(timestamp) {
+    const hora = new Date(timestamp).getHours();
+    if ( hora >= 0 && hora < 6 ) return 'moon';
+    if ( hora >= 6 && hora < 12 ) return 'sunrise';
+    if ( hora >= 12 && hora < 18 ) return 'sun';
+    if ( hora >= 18 && hora <= 23 ) return 'moon';
+  }
+
   verificarDados() {
-    alert('Verificar dados...');
+    const { nomeAlimento, totalKcal, classificacao } = this.state;
+    let itensInvalidos = [];
+
+    if (!nomeAlimento) { itensInvalidos.push('O que comeu?') };
+    if (isNaN( parseInt( totalKcal )) ) { itensInvalidos.push('Quantas calorias?') };
+
+    if ( itensInvalidos.length ) {
+      Alert.alert('Ops!', `Corrija os campos: \n- ${ itensInvalidos.join('\n- ') }`);
+      return;
+    }
+
+    // persistir dados
+    timestamp_now = new Date().getTime();
+
+    const registro = {
+      titulo: nomeAlimento,
+      tipo: classificacao,
+      timestamp: timestamp_now,
+      kcal: totalKcal,
+      icone: this.getIcone(timestamp_now)
+    }
+
+    Alert.alert('Quase lá!', 'Salvar esse registro?', [
+      { text: 'Cancelar', onPress: null },
+      { text: 'Sim, salvar', onPress: () => {
+        DataBase.addRegistro(registro, results => {
+          console.log('addRegistro', results);
+          if(results.rowsAffected == 1) {
+            Alert.alert('Tudo certo', 'Registro foi salvo, não esqueça de anotar os próximos.', [
+              { text: "OK", onPress: () => {
+                  this.setState({
+                    nomeAlimento: '',
+                    totalKcal: '',
+                    classificacao: pickerOptions[0].nome,
+                  });
+                  this.props.navigation.goBack();
+                }
+              }
+            ]);
+          };
+        });        
+      }}
+    ]);
   }
 
   render() {
@@ -66,9 +117,12 @@ export default class NovoRegistro extends Component {
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Como classificaria?</Text>
           <View style={styles.pickerArea}>
-            <Picker selectedValue="Alimentação leve">
+            <Picker
+              selectedValue={ classificacao }
+              onValueChange={(newValue) => this.setState({ classificacao: newValue })}
+            >
               {
-                pickerOptions.map(item => <Picker.Item label={item.nome} value={item.nome}/>)
+                pickerOptions.map(item => <Picker.Item label={item.nome} value={item.nome} key={item.nome} />)
               }
             </Picker>
           </View>
@@ -78,6 +132,10 @@ export default class NovoRegistro extends Component {
           <Icon name="check" size={20} color='#fff'/>
           <Text style={styles.txtBotaoSalvar}>SALVAR</Text>
         </TouchableOpacity>
+
+        <Text>{ nomeAlimento }</Text>
+        <Text>{ totalKcal }</Text>
+        <Text>{ classificacao }</Text>
         
       </ScrollView>
     );
