@@ -190,7 +190,31 @@ export default class Home extends Component {
             extraData={this.state}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => {Alert.alert('Detalhes', 'detalhes')}}>
+              <TouchableOpacity onPress={() => {
+                Alert.alert('Detalhes do registro', `Nome: ${item.titulo}\nCalorias: ${item.kcal} kcal\nHora: ${moment(item.timestamp).format('HH\\h mm').replace(' ', '')}`, [
+                  { text: "Excluir", onPress: () => {
+                    Alert.alert('Cuidado', `Quer mesmo remover esse item?\n- ${item.titulo} | id = ${item.id}`, [
+                      { text: 'Cancelar', onPress: () => null },
+                      { text: 'Sim, quero apagar' , onPress: () => {
+                        DataBase.deletarRegistro(item.id, results => {
+                          console.log('resultado, deletarRegistro', results);
+                          if (results.rowsAffected > 0) {
+                            Alert.alert('Removido.', 'Registro removido com sucesso');
+                            // mapear o state.registros e remover o item apagado
+                          }
+                          else {
+                            Alert.alert('Falha.', 'Erro ao apagar o registro :(');
+                          }
+                        });
+                      }}
+                    ]);
+                  } },
+                  { text: "Editar", onPress: () => {
+                    this.props.navigation.navigate('NovoRegistro', { itemEditar: item });
+                  } },
+                  { text: "Fechar", onPress: () => null },
+                ]);
+              }}>
                 <View style={styles.registroContainer}>
                   <View style={styles.registroIconeArea}>
                     <Image source={icones[item.icone]} style={styles.registroIcone}/>

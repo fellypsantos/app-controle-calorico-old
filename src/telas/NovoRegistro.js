@@ -22,10 +22,14 @@ export default class NovoRegistro extends Component {
   constructor() {
     super();
     this.state = {
+      id: null,
       nomeAlimento: '',
       totalKcal: '',
       classificacao: pickerOptions[0].nome,
+      modoEdicao: false,
     }
+
+    this.inserirRegistro = this.inserirRegistro.bind(this);
   }
 
   getIcone(timestamp) {
@@ -36,8 +40,33 @@ export default class NovoRegistro extends Component {
     if ( hora >= 18 && hora <= 23 ) return 'moon';
   }
 
+  editarRegistro(registro) {
+    DataBase.updateRegistro(registro, result => {
+      console.log('resultado editarRegistro', result);
+      this.props.navigation.goBack();
+    })
+  }
+
+  inserirRegistro(registro) {
+    DataBase.addRegistro(registro, results => {
+      if(results.rowsAffected == 1) {
+        Alert.alert('Tudo certo', 'Registro foi salvo, não esqueça de anotar os próximos.', [
+          { text: "OK", onPress: () => {
+              this.setState({
+                nomeAlimento: '',
+                totalKcal: '',
+                classificacao: pickerOptions[0].nome,
+              });
+              this.props.navigation.goBack();
+            }
+          }
+        ]);
+      };
+    });
+  }
+
   verificarDados() {
-    const { nomeAlimento, totalKcal, classificacao } = this.state;
+    const { id, nomeAlimento, totalKcal, classificacao, modoEdicao } = this.state;
     let itensInvalidos = [];
 
     if (!nomeAlimento) { itensInvalidos.push('O que comeu?') };
@@ -52,6 +81,7 @@ export default class NovoRegistro extends Component {
     timestamp_now = new Date().getTime();
 
     const registro = {
+      id,
       titulo: nomeAlimento,
       tipo: classificacao,
       timestamp: timestamp_now,
@@ -59,31 +89,40 @@ export default class NovoRegistro extends Component {
       icone: this.getIcone(timestamp_now)
     }
 
-    Alert.alert('Quase lá!', 'Salvar esse registro?', [
-      { text: 'Cancelar', onPress: null },
-      { text: 'Sim, salvar', onPress: () => {
-        DataBase.addRegistro(registro, results => {
-          console.log('addRegistro', results);
-          if(results.rowsAffected == 1) {
-            Alert.alert('Tudo certo', 'Registro foi salvo, não esqueça de anotar os próximos.', [
-              { text: "OK", onPress: () => {
-                  this.setState({
-                    nomeAlimento: '',
-                    totalKcal: '',
-                    classificacao: pickerOptions[0].nome,
-                  });
-                  this.props.navigation.goBack();
-                }
-              }
-            ]);
-          };
-        });        
-      }}
-    ]);
+    // VERIFICAR AQUI, SE DEVE ADICIONAR O REGISTRO, OU ATUALIZAR
+
+    if (modoEdicao) {
+      Alert.alert('Tem certeza?', 'Você tá alterando dados de um registro, salvar?', [
+        { text: 'Cancelar', onPress: () => null },
+        { text: 'Sim, salvar', onPress: () =>  this.editarRegistro(registro)},
+      ])
+    }
+    else {
+      Alert.alert('Quase lá!', 'Salvar esse registro?', [
+        { text: 'Cancelar', onPress: null },
+        { text: 'Sim, salvar', onPress: () => this.inserirRegistro(registro)},
+      ]);
+    }
+  }
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    let item = navigation.getParam('itemEditar');
+
+    // SE TIVER ITEM PRA EDITAR, JOGA OS DADOS NO STATE
+    if (item != undefined) {
+      this.setState({
+        id: item.id,
+        nomeAlimento: item.titulo,
+        totalKcal: item.kcal.toString(),
+        classificacao: item.tipo,
+        modoEdicao: true,
+      });
+    }
   }
 
   render() {
-    const { nomeAlimento, totalKcal, classificacao } = this.state;
+    const { nomeAlimento, totalKcal, classificacao, modoEdicao } = this.state;
 
     return (
       <ScrollView style={styles.fundo}>
@@ -130,8 +169,12 @@ export default class NovoRegistro extends Component {
 
         <TouchableOpacity onPress={() => this.verificarDados()} style={styles.botaoSalvar}>
           <Icon name="check" size={20} color='#fff'/>
-          <Text style={styles.txtBotaoSalvar}>SALVAR</Text>
+          <Text style={styles.txtBotaoSalvar}>{ (modoEdicao) ? 'EDITAR' : 'SALVAR' }</Text>
         </TouchableOpacity>
+
+        <Text>{ nomeAlimento }</Text>
+        <Text>{ totalKcal }</Text>
+        <Text>{ classificacao }</Text>
         
       </ScrollView>
     );
