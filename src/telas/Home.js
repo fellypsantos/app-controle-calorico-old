@@ -274,8 +274,8 @@ const styles = StyleSheet.create({
   iconesTopo: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    // justifyContent: 'flex-end'
+    // justifyContent: 'space-between',
+    justifyContent: 'flex-end'
   },
   iconeTopoArea: {
     padding: 10,

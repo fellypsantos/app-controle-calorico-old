@@ -1,4 +1,4 @@
-package com.appcontrolecalorico;
+package com.santos.fellyp.contadorcalorias;
 
 import android.app.Application;
 
