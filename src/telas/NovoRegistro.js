@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, ScrollView, View, TextInput, Picker, TouchableOpacity, Alert} from 'react-native';
+import { StyleSheet, Text, ScrollView, View, TextInput, Picker, TouchableOpacity, Alert, ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Cores from '../Cores';
 import DataBase from '../DataBase';
@@ -11,13 +11,13 @@ const pickerOptions = [
 ]
 
 export default class NovoRegistro extends Component {
-  static navigationOptions = {
-      title: 'Novo Registro',
+  static navigationOptions = ({ navigation }) => ({
+      title: (navigation.getParam('itemEditar') != undefined) ? 'Editar registro' : 'Novo registro',
       headerStyle: {
         backgroundColor: '#7F22A7'
       },
       headerTintColor: '#fff',
-  };
+  });
 
   constructor() {
     super();
@@ -41,9 +41,14 @@ export default class NovoRegistro extends Component {
   }
 
   editarRegistro(registro) {
-    DataBase.updateRegistro(registro, result => {
-      console.log('resultado editarRegistro', result);
-      this.props.navigation.goBack();
+    DataBase.updateRegistro(registro, results => {
+      if (results.rowsAffected == 1) {
+        ToastAndroid.show('Registro editado com sucesso.', ToastAndroid.SHORT);
+        this.props.navigation.goBack();
+      }
+      else {
+        ToastAndroid.show('Erro ao editar o registro.', ToastAndroid.SHORT);
+      }
     })
   }
 
@@ -53,9 +58,11 @@ export default class NovoRegistro extends Component {
         Alert.alert('Tudo certo', 'Registro foi salvo, não esqueça de anotar os próximos.', [
           { text: "OK", onPress: () => {
               this.setState({
+                id: null,
                 nomeAlimento: '',
                 totalKcal: '',
                 classificacao: pickerOptions[0].nome,
+                modoEdicao: false,
               });
               this.props.navigation.goBack();
             }
@@ -171,10 +178,6 @@ export default class NovoRegistro extends Component {
           <Icon name="check" size={20} color='#fff'/>
           <Text style={styles.txtBotaoSalvar}>{ (modoEdicao) ? 'EDITAR' : 'SALVAR' }</Text>
         </TouchableOpacity>
-
-        <Text>{ nomeAlimento }</Text>
-        <Text>{ totalKcal }</Text>
-        <Text>{ classificacao }</Text>
         
       </ScrollView>
     );

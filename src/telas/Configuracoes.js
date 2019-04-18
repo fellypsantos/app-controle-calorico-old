@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import UserInput from '../components/UserInput';
 import UserPicker from '../components/UserPicker';
@@ -22,11 +23,18 @@ const FATOR_ATIVIDADE = [
   { label: 'Extremamente ativo (Exercício intenso diário)', value: 1.9}
 ];
 
+const novaPilha = StackActions.reset({
+  index: 0,
+  actions: [
+    NavigationActions.navigate({ routeName: 'Home' }),
+  ],
+});
+
 
 export default class Configuracoes extends Component {
   static navigationOptions = {
       title: 'Configurações',
-      headerLeft: null,
+      // headerLeft: null,
       headerStyle: {
         backgroundColor: '#7F22A7'
       },
@@ -107,7 +115,7 @@ export default class Configuracoes extends Component {
       (results) => {
         console.log('resultado updateDadosPerfil: ', results);
         Alert.alert('Ótimo!', "As informações foram salvas.", [
-          { text: 'Continuar', onPress: () => this.props.navigation.navigate('Home') }
+          { text: 'Continuar', onPress: () => this.props.navigation.dispatch(novaPilha) }
         ], { cancelable: false })
       }
     );

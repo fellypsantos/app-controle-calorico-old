@@ -9,6 +9,8 @@ import {
   Image,
   Alert,
   FlatList,
+  ToastAndroid,
+  AppState,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import moment from 'moment';
@@ -107,16 +109,26 @@ export default class Home extends Component {
     });
   }
 
+  atualizaDadosApp() {
+    this.atualizarStateDataBase();
+    this.atualizarRegistros();
+  }
+
   componentDidMount() {
     this.atualizarStateDataBase();
 
-    const didBlurSubscription = this.props.navigation.addListener(
+    this.props.navigation.addListener(
       'willFocus',
       payload => {
-        this.atualizarStateDataBase();
-        this.atualizarRegistros();
+        this.atualizaDadosApp();
       }
-    ); 
+    );
+
+    AppState.addEventListener('change', nextAppState => {
+      if (AppState.currentState == 'active') {
+        this.atualizaDadosApp();
+      }
+    });
   }
 
   render() {
@@ -131,9 +143,9 @@ export default class Home extends Component {
         <View style={styles.containerTopo}>
 
           <View style={styles.iconesTopo}>
-            <TouchableOpacity onPress={() => null} style={styles.iconeTopoArea}>
+            {/* <TouchableOpacity onPress={() => null} style={styles.iconeTopoArea}>
               <Icon5 name="door-open" size={20} color={Cores.roxoClaro}/>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => this.props.navigation.dispatch(resetAction)}
               style={styles.iconeTopoArea}>
@@ -199,8 +211,11 @@ export default class Home extends Component {
                         DataBase.deletarRegistro(item.id, results => {
                           console.log('resultado, deletarRegistro', results);
                           if (results.rowsAffected > 0) {
-                            Alert.alert('Removido.', 'Registro removido com sucesso');
+                            // Alert.alert('Removido.', 'Registro removido com sucesso');
                             // mapear o state.registros e remover o item apagado
+                            let novaListaRegistros = registros.filter(itemRegistro => (itemRegistro.id == item.id) ? false : true);
+                            this.setState({ registros: novaListaRegistros });
+                            ToastAndroid.show('Registro removido com sucesso', ToastAndroid.SHORT);
                           }
                           else {
                             Alert.alert('Falha.', 'Erro ao apagar o registro :(');
@@ -259,7 +274,8 @@ const styles = StyleSheet.create({
   iconesTopo: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    // justifyContent: 'flex-end'
   },
   iconeTopoArea: {
     padding: 10,
