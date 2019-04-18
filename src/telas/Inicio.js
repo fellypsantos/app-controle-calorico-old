@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, StatusBar, ActivityIndicator} from 'react-native';
+import {StyleSheet, Text, Image, View, TouchableOpacity, StatusBar, ActivityIndicator} from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import Cores from '../Cores';
 import DataBase from '../DataBase';
@@ -53,18 +53,21 @@ export default class Inicio extends Component {
               </View>
             )
           : (
-            <TouchableOpacity
-              style={styles.btnComecar}
-              onPress={() => { this.props.navigation.navigate('Configuracoes') }}
-            >
-              <Text style={styles.txtComecar}>COMEÇAR</Text>
-            </TouchableOpacity>
+            <View style={styles.containerTelaInicial}>
+              <Text style={styles.tituloApp}>Contador de Calorias</Text>
+              <Image source={require('../../assets/images/eating.png')} style={styles.iconePrincipal}/>
+              <Text style={styles.descricaoApp}>Você tem nas mãos um controle simples</Text>
+              <Text style={styles.descricaoApp}>e prático de sua alimentação.</Text>
+              <TouchableOpacity
+                style={styles.btnComecar}
+                onPress={() => { this.props.navigation.navigate('Configuracoes') }}
+              >
+                <Text style={styles.txtComecar}>Comece agora</Text>
+              </TouchableOpacity>
+            </View>
           )
         }
 
-        
-
-        
       </View>
     );
   }
@@ -78,20 +81,48 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btnComecar: {
-    width: 200,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Cores.roxoClaro,
-    padding: 15,
+    borderRadius: 5,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 6,
+    paddingBottom: 6,
+    marginTop: 100,
+    elevation: 2,
   },
   txtComecar: {
     color: Cores.roxoNubank,
-    fontSize: 25
+    fontSize: 18,
+    fontFamily: 'Open Sans Regular',
   },
   verificando: {
     fontSize: 15,
     color: Cores.roxoClaro,
     padding: 12,
     fontFamily: 'Open Sans Regular'
+  },
+
+  containerTelaInicial: {
+    // backgroundColor: '#747474',
+    // justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconePrincipal: {
+    width: 150,
+    height: 150,
+    marginTop: 80,
+    marginBottom: 80,
+  },
+  tituloApp: {
+    fontFamily: 'Open Sans Regular',
+    fontSize: 30,
+    color: Cores.roxoClaro,
+  },
+  descricaoApp: {
+    fontFamily: 'Open Sans Regular',
+    fontSize: 15,
+    color: Cores.roxoClaro,
   }
 });
