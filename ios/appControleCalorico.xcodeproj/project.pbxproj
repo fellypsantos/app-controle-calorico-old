@@ -61,6 +61,7 @@
 		F04B9AFBE98C4F3EB2E94F12 /* Open Sans Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DBF402C3CCD14E95829FE1DD /* Open Sans Bold.ttf */; };
 		A16AF61198A84A9D957CD79D /* Open Sans Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5874E81C3A624DCB9043289D /* Open Sans Light.ttf */; };
 		2F6FC56990C9459FAF97EB59 /* Open Sans Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D096F4CE3574F0782A0B72C /* Open Sans Regular.ttf */; };
+		C8C633CB19FD4C8F8EA2B270 /* libRCTOrientation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F617C5633883429FA6FB5097 /* libRCTOrientation.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -392,6 +393,8 @@
 		DBF402C3CCD14E95829FE1DD /* Open Sans Bold.ttf */ = {isa = PBXFileReference; name = "Open Sans Bold.ttf"; path = "../assets/fonts/Open Sans Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		5874E81C3A624DCB9043289D /* Open Sans Light.ttf */ = {isa = PBXFileReference; name = "Open Sans Light.ttf"; path = "../assets/fonts/Open Sans Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		8D096F4CE3574F0782A0B72C /* Open Sans Regular.ttf */ = {isa = PBXFileReference; name = "Open Sans Regular.ttf"; path = "../assets/fonts/Open Sans Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		939435377EFD430B979FD30C /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; name = "RCTOrientation.xcodeproj"; path = "../node_modules/react-native-orientation/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		F617C5633883429FA6FB5097 /* libRCTOrientation.a */ = {isa = PBXFileReference; name = "libRCTOrientation.a"; path = "libRCTOrientation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -422,6 +425,7 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				6FAE2C8EDAE94A548D569C56 /* libRNGestureHandler.a in Frameworks */,
 				364E05342DEB48FB92261C1B /* libRNVectorIcons.a in Frameworks */,
+				C8C633CB19FD4C8F8EA2B270 /* libRCTOrientation.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +619,7 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				700DBD65CD3045608396CB81 /* RNGestureHandler.xcodeproj */,
 				8DADD7690AC341B88F34DEC3 /* RNVectorIcons.xcodeproj */,
+				939435377EFD430B979FD30C /* RCTOrientation.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1291,11 +1296,13 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
 				);
 			};
 			name = Debug;
@@ -1321,11 +1328,13 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
 				);
 			};
 			name = Release;
@@ -1350,6 +1359,7 @@
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
 				);
 			};
 			name = Debug;
@@ -1373,6 +1383,7 @@
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
 				);
 			};
 			name = Release;
@@ -1406,11 +1417,13 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
 				);
 			};
 			name = Debug;
@@ -1444,11 +1457,13 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
 				);
 			};
 			name = Release;
@@ -1481,11 +1496,13 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
 				);
 			};
 			name = Debug;
@@ -1518,11 +1535,13 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
 				);
 			};
 			name = Release;

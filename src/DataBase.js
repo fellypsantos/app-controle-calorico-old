@@ -60,8 +60,6 @@ export default class DataBase {
     const sql = 'UPDATE registros SET titulo=?, tipo=?, kcal=? WHERE id = ?';
     const values = [registro.titulo, registro.tipo, registro.kcal, registro.id];
 
-    console.log('update', registro);
-
     this.db.transaction((tx) => {
       tx.executeSql(sql, values, (tx, results) => {
         callback(results);

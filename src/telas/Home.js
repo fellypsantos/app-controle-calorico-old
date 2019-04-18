@@ -205,14 +205,12 @@ export default class Home extends Component {
               <TouchableOpacity onPress={() => {
                 Alert.alert('Detalhes do registro', `Nome: ${item.titulo}\nCalorias: ${item.kcal} kcal\nHora: ${moment(item.timestamp).format('HH\\h mm').replace(' ', '')}`, [
                   { text: "Excluir", onPress: () => {
-                    Alert.alert('Cuidado', `Quer mesmo remover esse item?\n- ${item.titulo} | id = ${item.id}`, [
+                    Alert.alert('Cuidado', `Quer mesmo remover esse item?\n• ${item.titulo}`, [
                       { text: 'Cancelar', onPress: () => null },
                       { text: 'Sim, quero apagar' , onPress: () => {
                         DataBase.deletarRegistro(item.id, results => {
                           console.log('resultado, deletarRegistro', results);
                           if (results.rowsAffected > 0) {
-                            // Alert.alert('Removido.', 'Registro removido com sucesso');
-                            // mapear o state.registros e remover o item apagado
                             let novaListaRegistros = registros.filter(itemRegistro => (itemRegistro.id == item.id) ? false : true);
                             this.setState({ registros: novaListaRegistros });
                             ToastAndroid.show('Registro removido com sucesso', ToastAndroid.SHORT);
