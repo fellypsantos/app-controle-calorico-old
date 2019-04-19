@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, Image, View, TouchableOpacity, StatusBar, ActivityIndicator} from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
+import Orientation from 'react-native-orientation-locker';
 import Cores from '../Cores';
 import DataBase from '../DataBase';
 
@@ -26,6 +27,17 @@ export default class Inicio extends Component {
   }
 
   componentDidMount() {
+
+    this.props.navigation.addListener(
+      'willFocus',
+      payload => Orientation.lockToPortrait()
+    );
+
+    this.props.navigation.addListener(
+      'willBlur',
+      payload => Orientation.unlockAllOrientations()
+    );
+
     DataBase.getDadosPerfil((results) => {
       if ( results.rows.length ) {
         console.log('Dados de perfil encontrados', results.rows.item(0));

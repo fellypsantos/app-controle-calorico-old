@@ -3,6 +3,7 @@ package com.santos.fellyp.contadorcalorias;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.wonday.orientation.OrientationPackage;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
         new SQLitePluginPackage(),   // register SQLite Plugin here
         new MainReactPackage(),
+            new OrientationPackage(),
         new VectorIconsPackage(),
         new RNGestureHandlerPackage()
       );
