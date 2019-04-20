@@ -14,7 +14,7 @@ export default class TopoPaginabranca extends Component {
           ? <Text style={styles.contadorRegistos}>Já foram anotados { dados.registros.length } registros hoje.</Text>
           : <Text></Text>
         }
-        <TouchableOpacity onPress={() => navigationContext.navigate('NovoRegistro')}>
+        <TouchableOpacity onPress={() => navigationContext.navigate('MeusRegistros')}>
           <Icon5 name="plus-circle" size={20} color={Cores.roxoNubank}/>
         </TouchableOpacity>
       </View>

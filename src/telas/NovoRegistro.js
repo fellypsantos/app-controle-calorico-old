@@ -11,14 +11,6 @@ const pickerOptions = [
 ]
 
 export default class NovoRegistro extends Component {
-  static navigationOptions = ({ navigation }) => ({
-      title: (navigation.getParam('itemEditar') != undefined) ? 'Editar registro' : 'Novo registro',
-      headerStyle: {
-        backgroundColor: '#7F22A7'
-      },
-      headerTintColor: '#fff',
-  });
-
   constructor() {
     super();
     this.state = {
@@ -115,6 +107,9 @@ export default class NovoRegistro extends Component {
   componentDidMount() {
     const { navigation } = this.props;
     let item = navigation.getParam('itemEditar');
+    let itemDoHistorico = navigation.getParam('itemDoHistorico');
+
+    console.log('itemDoHistorico', itemDoHistorico);
 
     // SE TIVER ITEM PRA EDITAR, JOGA OS DADOS NO STATE
     if (item != undefined) {
@@ -124,6 +119,16 @@ export default class NovoRegistro extends Component {
         totalKcal: item.kcal.toString(),
         classificacao: item.tipo,
         modoEdicao: true,
+      });
+    }
+
+    // SE ESCOLHEU UM ITEM DO HISTÓRICO, JOGAR DADOS NO STATE
+    if (itemDoHistorico != undefined) {
+      this.setState({
+        id: null,
+        nomeAlimento: itemDoHistorico.nome,
+        totalKcal: itemDoHistorico.kcal.toString(),
+        classificacao: itemDoHistorico.tipo,
       });
     }
   }

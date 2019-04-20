@@ -77,7 +77,16 @@ export default class ListaRegistros extends Component {
             <Text style={styles.subInfo}>{item.tipo} | { moment(item.timestamp).format('HH\\h mm').replace(' ', '') }</Text>
             <Text style={styles.subInfo}>{item.kcal} kcal</Text>
           </View>
-          <Icon5 name='smile' size={15} color={Cores.roxoNubank}/>
+          <Icon5
+            name={
+              (item.tipo == 'Alimentação leve')
+              ? 'smile'
+              : ( item.tipo == 'Alimentação moderada' )
+                ? 'exclamation-triangle'
+                : 'sad-tear'
+            }
+            size={15} color={Cores.roxoNubank}
+            />
         </View>
       </TouchableOpacity>
     );

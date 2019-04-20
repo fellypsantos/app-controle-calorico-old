@@ -32,15 +32,6 @@ const novaPilha = StackActions.reset({
 
 
 export default class Configuracoes extends Component {
-  static navigationOptions = {
-      title: 'Configurações',
-      // headerLeft: null,
-      headerStyle: {
-        backgroundColor: '#7F22A7'
-      },
-      headerTintColor: '#fff',
-  };
-
   constructor() {
     super();
     this.state = {

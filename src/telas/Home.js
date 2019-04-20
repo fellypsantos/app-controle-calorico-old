@@ -1,21 +1,14 @@
 import React, {Component} from 'react';
 import {
-  Text,
   View,
   ScrollView,
   StyleSheet,
   StatusBar,
-  TouchableOpacity,
-  Image,
-  Alert,
-  FlatList,
-  ToastAndroid,
   AppState,
 } from 'react-native';
 import moment from 'moment';
 import Cores from '../Cores';
-import Icon5 from 'react-native-vector-icons/FontAwesome5';
-import DataBase from '../DataBase'
+import DataBase from '../DataBase';
 import IconesTopo from '../components/IconesTopo';
 import Perfil from '../components/Perfil';
 import CounterCalorias from '../components/CounterCalorias';
@@ -119,10 +112,6 @@ export default class Home extends Component {
         this.atualizaDadosApp();
       }
     });
-  }
-
-  componentWillUnmount() {
-    console.log('desmontar e desconectar tudo');
   }
 
   render() {

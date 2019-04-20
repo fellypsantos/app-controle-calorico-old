@@ -4,6 +4,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import Orientation from 'react-native-orientation-locker';
 import Cores from '../Cores';
 import DataBase from '../DataBase';
+import Loading from '../components/Loading';
 
 DataBase.open();
 
@@ -59,10 +60,11 @@ export default class Inicio extends Component {
         {
           (this.state.verificandoDados)
           ? (
-              <View>
-                <ActivityIndicator size="large" color="#fff" />
-                <Text style={styles.verificando}>Quase lá, carregando...</Text>
-              </View>
+              <Loading
+                texto="Quase lá, carregando..."
+                corLoading={Cores.roxoClaro}
+                corTexto={Cores.roxoClaro}
+              />
             )
           : (
             <View style={styles.containerTelaInicial}>

@@ -1,5 +1,6 @@
 import SQLite from 'react-native-sqlite-storage';
-import { Alert } from 'react-native';
+import React from 'react-native';
+import { Alert, ToastAndroid } from 'react-native';
 
 export default class DataBase {
 
@@ -46,12 +47,30 @@ export default class DataBase {
   }
 
   static addRegistro(registro, callback) {
-    const sql = 'INSERT INTO registros (titulo, tipo, timestamp, kcal, icone) VALUES (?,?,?,?,?)';
-    const values = [registro.titulo, registro.tipo, registro.timestamp, registro.kcal, registro.icone];
 
+    // ANTES DE ADICIONAR NO HISTÓRICO, VERIFICAR SE JÁ EXISTEM AS MESMAS INFORMAÇÕES NO BANDO
     this.db.transaction((tx) => {
-      tx.executeSql(sql, values, (tx, results) => {
-        callback(results);
+      tx.executeSql('SELECT * FROM historico WHERE nome=? AND kcal=? AND tipo=?', [registro.titulo, registro.kcal, registro.tipo], (tx, results) => {
+
+        // ADICIONAR NO HISTÓRICO
+        if (results.rows.length == 0) {
+          this.db.transaction((tx) => {
+            tx.executeSql('INSERT INTO historico(nome, kcal, tipo) VALUES(?,?,?)', [registro.titulo, registro.kcal, registro.tipo], (tx, results) => {
+              ToastAndroid.show(`Adicionado à sua lista de comidas.`, ToastAndroid.SHORT);
+            });
+          });
+        }
+
+        // ADICIONAR NOS REGISTROS
+        const sql = 'INSERT INTO registros (titulo, tipo, timestamp, kcal, icone) VALUES (?,?,?,?,?)';
+        const values = [registro.titulo, registro.tipo, registro.timestamp, registro.kcal, registro.icone];
+
+        this.db.transaction((tx) => {
+          tx.executeSql(sql, values, (tx, results) => {
+            callback(results);
+          });
+        });
+        
       });
     });
   }
@@ -86,5 +105,24 @@ export default class DataBase {
         callback(results);
       });
     });
+  }
+
+  static getHistoricoRegistros(callback) {
+    const sql = 'SELECT * FROM historico';
+
+    this.db.transaction((tx) => {
+      tx.executeSql(sql, [], (tx, historico) => {
+        callback(historico);
+      });
+    });
+  }
+
+  static apagarRegistroDoHistorico(id, callback) {
+    console.log('apagar', id);
+    this.db.transaction((tx) => {
+      tx.executeSql('DELETE FROM historico WHERE id=?', [id], (tx, results) => {
+        callback(results);
+      });
+    }); 
   }
 }
