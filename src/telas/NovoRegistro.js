@@ -56,7 +56,7 @@ export default class NovoRegistro extends Component {
                 classificacao: pickerOptions[0].nome,
                 modoEdicao: false,
               });
-              this.props.navigation.goBack();
+              this.props.navigation.navigate('Home');
             }
           }
         ]);

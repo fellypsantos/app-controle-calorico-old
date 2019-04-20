@@ -17,7 +17,7 @@ const AppNavigator = createStackNavigator({
   MeusRegistros: {
     screen: MeusRegistros,
     navigationOptions: {
-      title: 'Meus Registros'
+      title: 'Meus alimentos'
     }
   },
   NovoRegistro: {
