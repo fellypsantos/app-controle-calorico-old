@@ -1,11 +1,22 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, StatusBar, Alert, ToastAndroid, ActivityIndicator } from 'react-native';
-import Cores from '../Cores';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { FlatList } from 'react-native-gesture-handler';
-import DataBase from '../DataBase';
-import Loading from '../components/Loading';
-import NenhumRegistro from '../components/NenhumRegistro';
+import React, { Component } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  StatusBar,
+  Alert,
+  ToastAndroid,
+  ScrollView
+} from "react-native";
+import Cores from "../Cores";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { FlatList } from "react-native-gesture-handler";
+import DataBase from "../DataBase";
+import Loading from "../components/Loading";
+import NenhumRegistro from "../components/NenhumRegistro";
 
 DataBase.open();
 
@@ -14,30 +25,37 @@ export default class MeusRegistros extends Component {
     return {
       headerRight: (
         <View style={styles.areaIconesHeader}>
-          <TouchableOpacity style={styles.iconeHeader} onPress={() => navigation.navigate('NovoRegistro')}>
+          <TouchableOpacity
+            style={styles.iconeHeader}
+            onPress={() => navigation.navigate("NovoRegistro")}
+          >
             <Icon name="plus" size={20} color={Cores.roxoClaro} />
           </TouchableOpacity>
         </View>
-      ),
+      )
     };
   };
 
   constructor() {
     super();
     this.state = {
-      textoBusca: '',
+      textoBusca: "",
       carregandoHistorico: true,
-      historicoRegistros: [],
-    }
+      historicoRegistros: []
+    };
 
-    this.carregarHistoricoRegistros = this.carregarHistoricoRegistros.bind(this);
-    this.controleExibicaoHistoricoRegistros = this.controleExibicaoHistoricoRegistros.bind(this);
+    this.carregarHistoricoRegistros = this.carregarHistoricoRegistros.bind(
+      this
+    );
+    this.controleExibicaoHistoricoRegistros = this.controleExibicaoHistoricoRegistros.bind(
+      this
+    );
   }
 
   carregarHistoricoRegistros() {
     DataBase.getHistoricoRegistros(historico => {
       let dbHistorico = [];
-      for(let i=0; i<historico.rows.length; i++) {
+      for (let i = 0; i < historico.rows.length; i++) {
         dbHistorico.push(historico.rows.item(i));
       }
 
@@ -51,117 +69,143 @@ export default class MeusRegistros extends Component {
   componentDidMount() {
     this.props.navigation.setParams({ testeHeader: this.testeHeader });
 
-    this.props.navigation.addListener(
-      'willFocus',
-      payload => {
-        this.carregarHistoricoRegistros();
-      }
-    );
+    this.props.navigation.addListener("willFocus", payload => {
+      this.carregarHistoricoRegistros();
+    });
   }
 
   limpaCampoBusca() {
-    this.setState({ textoBusca: '' });
+    this.setState({ textoBusca: "" });
   }
 
   enviaNovoRegistro(item) {
-    this.props.navigation.navigate('NovoRegistro', { itemDoHistorico: item });
+    this.props.navigation.navigate("NovoRegistro", { itemDoHistorico: item });
   }
 
   clickRegistroHistorico(item) {
-    Alert.alert('Ótimo', `O que faremos com esse alimento?\n\n• ${item.nome}`, [
-      { text: 'Remover', onPress: () => {
-        Alert.alert('Atenção!', 'Você vai remover um item do seu histórico, isso não afeta seu consumo diário, apenas sua lista de comidas. Continuar?', [
-          { text: 'Cancelar', onPress: () => null, },
-          { text: 'Sim, apagar', onPress: () => {
-            DataBase.apagarRegistroDoHistorico(item.id, results => {
-              if (results.rowsAffected > 0) {
-                this.carregarHistoricoRegistros();
-                ToastAndroid.show('Alimento removido da sua lista.', ToastAndroid.SHORT);
-              } else {
-                ToastAndroid.show('Erro ao remover o item do histórico.', ToastAndroid.SHORT);
+    Alert.alert("Ótimo", `O que faremos com esse alimento?\n\n• ${item.nome}`, [
+      {
+        text: "Remover",
+        onPress: () => {
+          Alert.alert(
+            "Atenção!",
+            "Você vai remover um item do seu histórico, isso não afeta seu consumo diário, apenas sua lista de comidas. Continuar?",
+            [
+              { text: "Cancelar", onPress: () => null },
+              {
+                text: "Sim, apagar",
+                onPress: () => {
+                  DataBase.apagarRegistroDoHistorico(item.id, results => {
+                    if (results.rowsAffected > 0) {
+                      this.carregarHistoricoRegistros();
+                      ToastAndroid.show(
+                        "Alimento removido da sua lista.",
+                        ToastAndroid.SHORT
+                      );
+                    } else {
+                      ToastAndroid.show(
+                        "Erro ao remover o item do histórico.",
+                        ToastAndroid.SHORT
+                      );
+                    }
+                  });
+                }
               }
-            });
-          }}
-        ])
-        },
+            ]
+          );
+        }
       },
-      { text: 'Acabei de ingerir', onPress: () => this.enviaNovoRegistro(item) }
+      { text: "Acabei de ingerir", onPress: () => this.enviaNovoRegistro(item) }
     ]);
   }
 
   controleExibicaoHistoricoRegistros() {
     const { textoBusca, historicoRegistros } = this.state;
 
-    if(textoBusca != "") {
+    if (textoBusca != "") {
       let resultadoFiltro = historicoRegistros.filter(item => {
-        return ( item.nome.toLowerCase().search(textoBusca.toLowerCase()) > -1 ) ? true : false;
+        return item.nome.toLowerCase().search(textoBusca.toLowerCase()) > -1
+          ? true
+          : false;
       });
 
       return resultadoFiltro;
-    }
-    else {
+    } else {
       return historicoRegistros;
     }
-
   }
 
   render() {
     const { textoBusca, carregandoHistorico, historicoRegistros } = this.state;
 
-    return(
-      <View style={ (carregandoHistorico) ? { flex: 1 } : null }>
+    return (
+      <View style={carregandoHistorico ? { flex: 1 } : null}>
+        <StatusBar
+          backgroundColor={Cores.roxoNubank}
+          barStyle="light-content"
+        />
 
-        <StatusBar backgroundColor={Cores.roxoNubank} barStyle="light-content" />
-
-        {
-          carregandoHistorico
-          ? <Loading texto="Carregando histórico..." corLoading={Cores.roxoNubank }/>
-          : (
-            <View>
-              {/* CAMPO DE BUSCA */}
-              <View style={styles.containerTopoBusca}>
-                <View style={styles.areaBusca}>
-                  <View style={styles.icone}><Icon name="search" size={15} /></View>
-                  <TextInput
-                    style={styles.inputBusca}
-                    placeholder="Encontre um registro..."
-                    value={textoBusca}
-                    onChangeText={( text ) => this.setState({ textoBusca: text })}
-                  />
-                  <TouchableOpacity
-                    style={styles.btnLimparBusca}
-                    onPress={() => this.setState({ textoBusca: '' })}
-                  >
-                    <View><Icon name="window-close" size={15} /></View>
-                  </TouchableOpacity>
+        {carregandoHistorico ? (
+          <Loading
+            texto="Carregando histórico..."
+            corLoading={Cores.roxoNubank}
+          />
+        ) : (
+          <View>
+            {/* CAMPO DE BUSCA */}
+            <View style={styles.containerTopoBusca}>
+              <View style={styles.areaBusca}>
+                <View style={styles.icone}>
+                  <Icon name="search" size={15} />
                 </View>
+                <TextInput
+                  style={styles.inputBusca}
+                  placeholder="Encontre um registro..."
+                  value={textoBusca}
+                  onChangeText={text => this.setState({ textoBusca: text })}
+                />
+                <TouchableOpacity
+                  style={styles.btnLimparBusca}
+                  onPress={() => this.setState({ textoBusca: "" })}
+                >
+                  <View>
+                    <Icon name="window-close" size={15} />
+                  </View>
+                </TouchableOpacity>
               </View>
+            </View>
 
-              <NenhumRegistro totalRegistros={historicoRegistros.length} />
+            <NenhumRegistro totalRegistros={historicoRegistros.length} />
 
-              {/* LISTA DE REGISTROS */}
+            {/* LISTA DE REGISTROS */}
+            <ScrollView>
               <FlatList
                 inverted
                 data={this.controleExibicaoHistoricoRegistros()}
                 extraData={this.state}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                  <TouchableOpacity style={styles.itemHistoricoRegistros} onPress={() => this.clickRegistroHistorico(item)}>
+                  <TouchableOpacity
+                    style={styles.itemHistoricoRegistros}
+                    onPress={() => this.clickRegistroHistorico(item)}
+                  >
                     <View style={styles.iconeRegistro}>
-                      <Image source={require('../../assets/images/food.png')} style={{ width: 50, height: 50 }}/>
+                      <Image
+                        source={require("../../assets/images/food.png")}
+                        style={{ width: 50, height: 50 }}
+                      />
                     </View>
                     <View>
-                      <Text style={styles.nome}>{ item.nome }</Text>
-                      <Text style={styles.subInfo}>{ item.kcal } kcal</Text>
-                      <Text style={styles.subInfo}>{ item.tipo } </Text>
+                      <Text style={styles.nome}>{item.nome}</Text>
+                      <Text style={styles.subInfo}>{item.kcal} kcal</Text>
+                      <Text style={styles.subInfo}>{item.tipo} </Text>
                     </View>
                   </TouchableOpacity>
                 )}
               />
-            </View>
-          )
-        }
-
+            </ScrollView>
+          </View>
+        )}
       </View>
     );
   }
@@ -169,20 +213,20 @@ export default class MeusRegistros extends Component {
 
 const styles = StyleSheet.create({
   areaIconesHeader: {
-    flexDirection: 'row',
+    flexDirection: "row"
   },
   iconeHeader: {
     padding: 10,
-    marginRight: 5,
+    marginRight: 5
   },
 
   containerTopoBusca: {
-    backgroundColor: '#efefef',
+    backgroundColor: "#efefef"
   },
   areaBusca: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   icone: {
     paddingLeft: 10,
@@ -190,34 +234,34 @@ const styles = StyleSheet.create({
   },
   inputBusca: {
     flex: 1,
-    color: '#545454',
-    fontFamily: 'Open Sans Regular',
-    fontSize: 15,
+    color: "#545454",
+    fontFamily: "Open Sans Regular",
+    fontSize: 15
   },
   btnLimparBusca: {
-    padding: 15,
+    padding: 15
   },
 
   itemHistoricoRegistros: {
-    flexDirection: 'row',
+    flexDirection: "row",
     borderBottomWidth: 1,
-    borderColor: '#efefef',
+    borderColor: "#efefef",
     paddingTop: 10,
-    paddingBottom: 10,
+    paddingBottom: 10
   },
   iconeRegistro: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
     marginLeft: 15,
-    marginRight: 15,
+    marginRight: 15
   },
   nome: {
-    fontFamily: 'Open Sans Regular',
-    fontSize: 18,
+    fontFamily: "Open Sans Regular",
+    fontSize: 18
   },
   subInfo: {
-    fontFamily: 'Open Sans Regular',
+    fontFamily: "Open Sans Regular",
     fontSize: 13
   }
 });
