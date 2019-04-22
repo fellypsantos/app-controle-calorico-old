@@ -151,7 +151,7 @@ export default class MeusRegistros extends Component {
             corLoading={Cores.roxoNubank}
           />
         ) : (
-          <View>
+          <ScrollView>
             {/* CAMPO DE BUSCA */}
             <View style={styles.containerTopoBusca}>
               <View style={styles.areaBusca}>
@@ -178,7 +178,7 @@ export default class MeusRegistros extends Component {
             <NenhumRegistro totalRegistros={historicoRegistros.length} />
 
             {/* LISTA DE REGISTROS */}
-            <ScrollView>
+            <View>
               <FlatList
                 inverted
                 data={this.controleExibicaoHistoricoRegistros()}
@@ -203,8 +203,8 @@ export default class MeusRegistros extends Component {
                   </TouchableOpacity>
                 )}
               />
-            </ScrollView>
-          </View>
+            </View>
+          </ScrollView>
         )}
       </View>
     );
