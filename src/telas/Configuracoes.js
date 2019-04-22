@@ -73,10 +73,11 @@ export default class Configuracoes extends Component {
       itensErrados.push("Nome");
     }
 
-    if (frase.length == 0) {
-      console.log("Frase vazia.");
-      itensErrados.push("Frase");
-    }
+    // FRASE DE PERFIL NÃO DEVE SER OBRIGATÓRIA
+    // if (frase.length == 0) {
+    //   console.log("Frase vazia.");
+    //   itensErrados.push("Frase");
+    // }
 
     if (isNaN(peso) || !(peso > 10 && peso <= 400)) {
       console.log("Corrija o peso.");
