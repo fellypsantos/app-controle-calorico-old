@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "421242524139",
+    "project_id": "appcontrolecalorico",
+    "storage_bucket": "appcontrolecalorico.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421242524139:android:51af1075ef38e49e53c9ae",
+        "android_client_info": {
+          "package_name": "com.santos.fellyp.contadorcalorias"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421242524139-a65komeb80f71oe63f70s7hni3uh5c1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsHoOMQGtL9C-JNtln9mQnjQhEi84-d3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "421242524139-a65komeb80f71oe63f70s7hni3uh5c1s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
