@@ -1,37 +1,23 @@
-import { createStackNavigator, createAppContainer } from 'react-navigation';
-import TelaInicio from './src/telas/Inicio';
-import Configuracoes from './src/telas/Configuracoes';
-import Home from './src/telas/Home';
-import MeusRegistros from './src/telas/MeusRegistros';
-import NovoRegistro from './src/telas/NovoRegistro';
+import React from 'react';
+import {StatusBar} from 'react-native';
 
-const AppNavigator = createStackNavigator({
-  TelaInicio: {screen: TelaInicio},
-  Home: {screen: Home},
-  Configuracoes: {
-    screen: Configuracoes,
-    navigationOptions: {
-      title: 'Configurações'
-    }
-  },
-  MeusRegistros: {
-    screen: MeusRegistros,
-    navigationOptions: {
-      title: 'Meus alimentos'
-    }
-  },
-  NovoRegistro: {
-    screen: NovoRegistro,
-    navigationOptions: ({ navigation }) => ({
-      title: (navigation.getParam('itemEditar') != undefined) ? 'Editar registro' : 'Novo registro alimentar',
-    })
-  },
-}, {
-  initialRouteName: 'TelaInicio',
-  defaultNavigationOptions: {
-    headerStyle: { backgroundColor: '#7F22A7' },
-    headerTintColor: '#fff',
-  }
-});
+import MainContainer from './src/components/MainContainer';
+import AdMobFooterContainer from './src/components/AdMobFooterContainer';
+import TabNavigatorContainer from './src/components/TabNavigatorContainer';
 
-export default createAppContainer(AppNavigator);
+import Colors from './src/Colors';
+
+const App = () => {
+  return (
+    <MainContainer>
+      <StatusBar
+        backgroundColor={Colors.Purple.Idle}
+        barStyle="light-content"
+      />
+      <TabNavigatorContainer />
+      <AdMobFooterContainer />
+    </MainContainer>
+  );
+};
+
+export default App;
