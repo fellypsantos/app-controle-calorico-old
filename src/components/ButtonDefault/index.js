@@ -2,11 +2,11 @@ import React from 'react';
 
 import {Container, IconBox, Label} from './styles';
 
-const ButtonDefault = () => (
-  <Container>
+const ButtonDefault = ({text = '', onPress}) => (
+  <Container onPress={onPress}>
     <>
       <IconBox name="check" size={18} />
-      <Label>Salvar Registro</Label>
+      <Label>{text}</Label>
     </>
   </Container>
 );

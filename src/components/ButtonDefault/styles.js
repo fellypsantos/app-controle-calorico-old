@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import Colors from '../../Colors';
 
-export const Container = styled.TouchableHighlight`
+export const Container = styled.TouchableOpacity`
   flex-direction: row;
   border: 1px solid #ccc;
   background-color: ${Colors.Purple.Idle};

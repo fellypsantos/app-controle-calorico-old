@@ -8,15 +8,11 @@ import {
   TheIcon,
 } from './styles';
 
-const FoodCategorySelector = () => {
-  const [options, setOptions] = useState([
-    {id: 1, label: 'Leve', icon: 'smile', checked: false},
-    {id: 2, label: 'Moderada', icon: 'exclamation-triangle', checked: true},
-    {id: 3, label: 'Pesada', icon: 'sad-tear', checked: false},
-  ]);
+const FoodCategorySelector = ({arrOptions, handleChange}) => {
+  const [options, setOptions] = useState(arrOptions);
 
   const handleUpdateOptions = item => {
-    const updatedOptions = options.map(checkbox => {
+    const updatedOptions = arrOptions.map(checkbox => {
       if (checkbox.id === item.id) {
         return {
           ...checkbox,
@@ -30,6 +26,7 @@ const FoodCategorySelector = () => {
       };
     });
 
+    handleChange(item.id);
     setOptions(updatedOptions);
   };
 

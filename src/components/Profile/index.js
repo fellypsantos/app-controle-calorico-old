@@ -1,14 +1,23 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Container, Name, Phrase, ProfilePicture} from './styles';
 
-const profilePicture = require('../../../assets/images/man.png');
+import {ProfileContext} from '../../Contexts/ProfileContext';
+const profilePictureMale = require('../../../assets/images/man.png');
+const profilePictureFemale = require('../../../assets/images/girl.png');
 
-const Profile = () => (
-  <Container>
-    <ProfilePicture source={profilePicture} />
-    <Name>Jhon Doe</Name>
-    <Phrase>Just a guy in love with codes.</Phrase>
-  </Container>
-);
+const Profile = () => {
+  const {theProfile} = useContext(ProfileContext);
+  return (
+    <Container>
+      <ProfilePicture
+        source={
+          theProfile.gender === 'M' ? profilePictureMale : profilePictureFemale
+        }
+      />
+      <Name>{theProfile.name}</Name>
+      <Phrase>{theProfile.phrase}</Phrase>
+    </Container>
+  );
+};
 
 export default Profile;

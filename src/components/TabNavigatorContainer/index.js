@@ -1,6 +1,5 @@
 import React from 'react';
 
-import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import Home from '../../pages/Home';
@@ -10,36 +9,39 @@ import Colors from '../../Colors';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-const screenOptions = ({route}) => ({
-  tabBarIcon: ({focused, color, size}) => {
-    let iconName;
-
-    if (route.name === 'Home') {
-      iconName = 'home';
-    } else if (route.name === 'History') {
-      iconName = 'history';
-    } else if (route.name === 'Settings') {
-      iconName = 'cog';
-    }
-
-    // You can return any component that you like here!
-    return <Icon name={iconName} size={15} color={color} />;
-  },
-});
-
-const tabBarOptions = {
-  activeTintColor: Colors.Purple.Idle,
-  activeBackgroundColor: '#fff',
-  inactiveBackgroundColor: '#f5f5f5',
-  labelPosition: 'beside-icon',
-  inactiveTintColor: 'gray',
-};
-
 const Tab = createBottomTabNavigator();
 
-const TabNavigatorContainer = () => (
-  <NavigationContainer>
-    <Tab.Navigator screenOptions={screenOptions} tabBarOptions={tabBarOptions}>
+const TabNavigatorContainer = () => {
+  const tabBarOptions = {
+    activeTintColor: Colors.Purple.Idle,
+    activeBackgroundColor: '#fff',
+    inactiveBackgroundColor: '#f5f5f5',
+    labelPosition: 'beside-icon',
+    inactiveTintColor: 'gray',
+  };
+
+  const screenOptions = ({route}) => ({
+    tabBarIcon: ({focused, color, size}) => {
+      let iconName;
+
+      if (route.name === 'Home') {
+        iconName = 'home';
+      } else if (route.name === 'History') {
+        iconName = 'history';
+      } else if (route.name === 'Settings') {
+        iconName = 'cog';
+      }
+
+      // You can return any component that you like here!
+      return <Icon name={iconName} size={15} color={color} />;
+    },
+  });
+
+  return (
+    <Tab.Navigator
+      screenOptions={screenOptions}
+      tabBarOptions={tabBarOptions}
+      initialRouteName={'Home'}>
       <Tab.Screen
         name="Home"
         component={Home}
@@ -56,9 +58,10 @@ const TabNavigatorContainer = () => (
         name="Settings"
         component={Settings}
         options={{tabBarLabel: 'Configurações'}}
+        initialParams={{isFirstRun: false}}
       />
     </Tab.Navigator>
-  </NavigationContainer>
-);
+  );
+};
 
 export default TabNavigatorContainer;

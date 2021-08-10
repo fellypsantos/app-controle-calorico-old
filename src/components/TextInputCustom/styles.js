@@ -17,11 +17,11 @@ export const TextInputControl = styled.TextInput`
   padding: 8px 10px;
 `;
 
-export const ButtonClearInput = styled.TouchableOpacity`
+export const ButtonInputHandler = styled.TouchableOpacity`
   justify-content: center;
   padding: 0 10px;
 `;
 
-export const ClearInputIcon = styled(Icon)`
+export const ButtonInputHandlerIcon = styled(Icon)`
   color: ${Colors.Purple.Idle};
 `;

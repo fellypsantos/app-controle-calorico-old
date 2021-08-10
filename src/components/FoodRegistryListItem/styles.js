@@ -4,7 +4,6 @@ import Colors from '../../Colors';
 export const Container = styled.View`
   flex-direction: row;
   align-items: center;
-  margin-top: 25px;
 `;
 
 export const IconContainer = styled.View`

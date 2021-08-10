@@ -1,20 +1,43 @@
 import React from 'react';
+import {Text} from 'react-native';
 
 import {
-  ButtonClearInput,
-  ClearInputIcon,
+  ButtonInputHandler,
+  ButtonInputHandlerIcon,
   Container,
   TextInputControl,
 } from './styles';
 
-const TextInputCustom = ({value, placeholder}) => (
-  <Container>
-    <TextInputControl value={value} placeholder={placeholder} />
+import FormLabelControl from '../FormLabelControl';
 
-    <ButtonClearInput onPress={() => console.log('clear')}>
-      <ClearInputIcon name="trash" size={18} />
-    </ButtonClearInput>
-  </Container>
+const TextInputCustom = ({
+  value,
+  placeholder,
+  onChange,
+  renderAsDateTimePicker,
+  handleIconFunction,
+  keyboardType = 'default',
+  label = 'TheLabel',
+}) => (
+  <>
+    <FormLabelControl text={label} />
+    <Container>
+      <TextInputControl
+        value={value}
+        placeholder={placeholder}
+        onChangeText={onChange}
+        editable={!renderAsDateTimePicker}
+        keyboardType={keyboardType}
+      />
+
+      <ButtonInputHandler onPress={handleIconFunction}>
+        <ButtonInputHandlerIcon
+          name={renderAsDateTimePicker ? 'clock' : 'trash'}
+          size={18}
+        />
+      </ButtonInputHandler>
+    </Container>
+  </>
 );
 
 export default TextInputCustom;
