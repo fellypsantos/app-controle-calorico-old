@@ -17,7 +17,7 @@ const TopBarAddFoodRegistry = ({navigation}) => {
         {theFoodHistory.length === 0
           ? 'Anote a sua primeira refeição.'
           : `Você anotou ${theFoodHistory.length} registro${
-              theFoodHistory.length !== 1 && 's'
+              theFoodHistory.length !== 1 ? 's' : ''
             } hoje.`}
       </PhraseRegistryCount>
 

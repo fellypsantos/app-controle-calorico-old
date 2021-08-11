@@ -7,7 +7,7 @@ export default {
       duration === 'SHORT' ? ToastAndroid.SHORT : ToastAndroid.LONG,
       ToastAndroid.TOP,
       0,
-      50,
+      5,
     );
   },
 };

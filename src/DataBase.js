@@ -72,13 +72,13 @@ export default class DataBase {
     });
   };
 
-  static getFoodHistory = callback => {
+  static getFoodHistory = (datetime_sql, callback) => {
     this.validateConnection();
 
     this.db.transaction(tx => {
       tx.executeSql(
-        'SELECT * FROM food_registry ORDER BY id DESC',
-        null,
+        'SELECT * FROM food_registry WHERE date(datetime_sql) = date(?) ORDER BY id DESC',
+        [datetime_sql],
         (tx, results) => {
           callback(results);
         },

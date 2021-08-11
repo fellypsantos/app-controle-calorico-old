@@ -1,5 +1,7 @@
 import React, {createContext, useState, useEffect} from 'react';
+import {NativeModules} from 'react-native';
 import Database from '../DataBase';
+import moment from 'moment/min/moment-with-locales';
 
 export const ProfileContext = createContext();
 
@@ -14,7 +16,13 @@ const ProfileProvider = ({children}) => {
     activity_factor: 1.2,
   });
 
+  const deviceLocale = NativeModules.I18nManager.localeIdentifier;
+  const momentjs = moment();
+  momentjs.locale(deviceLocale);
+
   const [theFoodHistory, setFoodHistory] = useState([]);
+  const [foodHistoryDate, setFoodHistoryDate] = useState(momentjs);
+  const [dateInHistoryTab, setDateInHistoryTab] = useState(momentjs);
 
   useEffect(() => {
     console.log('LOADING CONTEXT FROM DATABASE...');
@@ -33,7 +41,7 @@ const ProfileProvider = ({children}) => {
       }
     });
 
-    Database.getFoodHistory(res => {
+    Database.getFoodHistory(moment().format('YYYY-MM-DD'), res => {
       if (res.rows.length > 0) {
         const dbFoodList = res.rows.raw();
         setFoodHistory(dbFoodList);
@@ -79,6 +87,10 @@ const ProfileProvider = ({children}) => {
     setProfile,
     theFoodHistory,
     setFoodHistory,
+    foodHistoryDate,
+    setFoodHistoryDate,
+    dateInHistoryTab,
+    setDateInHistoryTab,
   };
 
   return (

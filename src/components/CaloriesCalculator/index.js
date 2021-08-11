@@ -4,8 +4,9 @@ import {Container, ContainerKcalInfo, KcalLabel, KcalValue} from './styles';
 import {ProfileContext} from '../../Contexts/ProfileContext';
 
 const CaloriesCalculator = () => {
-  const {theProfile} = useContext(ProfileContext);
+  const {theProfile, theFoodHistory} = useContext(ProfileContext);
   const [BEEValue, setBEEValue] = useState(0);
+  const [kcalSum, setKcalSum] = useState(0);
 
   useEffect(() => {
     // BEE Calculator
@@ -21,6 +22,17 @@ const CaloriesCalculator = () => {
     setBEEValue(parsedResult);
   }, [theProfile]);
 
+  useEffect(() => {
+    let tempKcalSum = 0;
+
+    theFoodHistory.map(item => {
+      tempKcalSum += parseInt(item.kcal, 10);
+      setKcalSum(tempKcalSum);
+      return item;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theFoodHistory]);
+
   return (
     <Container>
       <ContainerKcalInfo>
@@ -29,7 +41,7 @@ const CaloriesCalculator = () => {
       </ContainerKcalInfo>
 
       <ContainerKcalInfo isMiddle>
-        <KcalValue isMiddle>905</KcalValue>
+        <KcalValue isMiddle>{kcalSum}</KcalValue>
         <KcalLabel>Consumido (KCal)</KcalLabel>
       </ContainerKcalInfo>
 
