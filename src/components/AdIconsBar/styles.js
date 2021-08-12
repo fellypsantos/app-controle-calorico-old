@@ -7,3 +7,8 @@ export const AdButtonContainer = styled.View`
   background-color: ${Colors.Purple.Idle};
   padding: 10px 15px;
 `;
+
+export const AdButtonBlock = styled.View`
+  flex: 1;
+  align-items: ${props => (props.alignToRight ? 'flex-end' : 'flex-start')};
+`;

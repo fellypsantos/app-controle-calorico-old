@@ -8,20 +8,35 @@ import NoFoodRegistry from '../../components/NoFoodRegistry';
 import {ProfileContext} from '../../Contexts/ProfileContext';
 import DataBase from '../../DataBase';
 
-import {Container, FoodHistoryList, ListItemContainer} from './styles';
+import {
+  Container,
+  FoodHistoryList,
+  ListItemContainer,
+  KcalSumContainer,
+  KcalSumText,
+} from './styles';
 
 const History = () => {
   const {dateInHistoryTab} = useContext(ProfileContext);
   const [foodListHistoryTab, setFoodListHistoryTab] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [kcalTotalValue, setKcalTotalValue] = useState(0);
 
   useEffect(() => {
     console.log('LOAD FOOD HISTORY TAB');
     setLoading(true);
 
+    let tempKcalTotal = 0;
     DataBase.getFoodHistory(dateInHistoryTab.format('YYYY-MM-DD'), result => {
       const dbFoodList = result.rows.raw();
       setFoodListHistoryTab(dbFoodList);
+
+      dbFoodList.map(item => {
+        tempKcalTotal += item.kcal;
+        return item;
+      });
+
+      setKcalTotalValue(tempKcalTotal);
     });
 
     setTimeout(() => setLoading(false), 1500);
@@ -45,11 +60,18 @@ const History = () => {
       ) : foodListHistoryTab.length === 0 ? (
         <NoFoodRegistry />
       ) : (
-        <FoodHistoryList
-          data={foodListHistoryTab}
-          keyExtractor={item => item.id}
-          renderItem={renderItem}
-        />
+        <>
+          <FoodHistoryList
+            data={foodListHistoryTab}
+            keyExtractor={item => item.id}
+            renderItem={renderItem}
+          />
+          <KcalSumContainer>
+            <KcalSumText>
+              Total calórico da lista é de {kcalTotalValue} Kcal
+            </KcalSumText>
+          </KcalSumContainer>
+        </>
       )}
     </Container>
   );

@@ -127,4 +127,14 @@ export default class DataBase {
       );
     });
   };
+
+  static getLastSeenRewardAd = callback => {
+    this.validateConnection();
+
+    this.db.transaction(tx => {
+      tx.executeSql('SELECT * FROM admob', null, (tx, results) => {
+        callback(results);
+      });
+    });
+  };
 }

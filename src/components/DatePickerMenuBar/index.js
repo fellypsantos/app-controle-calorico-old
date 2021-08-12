@@ -32,7 +32,7 @@ const DatePickerMenuBar = () => {
   };
 
   const setToday = () => {
-    setDateInHistoryTab(moment());
+    setDateInHistoryTab(momentjs);
     Toaster.ShowToast('Ótimo! A data voltou para hoje :)');
   };
 
