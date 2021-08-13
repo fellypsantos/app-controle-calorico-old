@@ -19,6 +19,7 @@ import AddFoodRegistry from '../../components/AddFoodRegistry';
 import FoodRegistryListItem from '../../components/FoodRegistryListItem';
 import Toaster from '../../Toaster';
 import {ProfileContext} from '../../Contexts/ProfileContext';
+import AdModRewardIntro from '../AdMobRewardIntro';
 
 const Stack = createStackNavigator();
 
@@ -64,6 +65,7 @@ const Home = () => {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="MainSection" component={MainSection} />
+      <Stack.Screen name="AdMobRewardIntro" component={AdModRewardIntro} />
       <Stack.Screen
         name="AddFoodRegistrySection"
         component={AddFoodRegistrySection}

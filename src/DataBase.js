@@ -137,4 +137,18 @@ export default class DataBase {
       });
     });
   };
+
+  static setLastSeenRewardAd = (moment_timestamp, callback) => {
+    this.validateConnection();
+
+    this.db.transaction(tx => {
+      tx.executeSql(
+        'UPDATE admob SET ts_moment_last_seen_reward_ad=?',
+        [moment_timestamp],
+        (tx, results) => {
+          callback(results);
+        },
+      );
+    });
+  };
 }
