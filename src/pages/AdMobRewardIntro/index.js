@@ -1,8 +1,9 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 import {Alert, ActivityIndicator} from 'react-native';
 import {AdMobRewarded} from 'react-native-admob';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment/min/moment-with-locales';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 import DataBase from '../../DataBase';
 import {ProfileContext} from '../../Contexts/ProfileContext';
@@ -21,6 +22,7 @@ const AdModRewardIntro = () => {
   const navigation = useNavigation();
   const [userRewarded, setUserRewarded] = useState(false);
   const [isLoadingAd, setLoadingAd] = useState(false);
+  const confettiCannon = useRef();
 
   const {setIsPremiumTime} = useContext(ProfileContext);
 
@@ -46,6 +48,9 @@ const AdModRewardIntro = () => {
 
           // Update app to hide all ads
           setIsPremiumTime(true);
+
+          console.log('useRef', confettiCannon.current);
+          confettiCannon.current.start();
 
           // Show Alert and close window
           Alert.alert(
@@ -85,6 +90,12 @@ const AdModRewardIntro = () => {
 
   return (
     <Container>
+      <ConfettiCannon
+        ref={confettiCannon}
+        count={50}
+        autoStart={false}
+        origin={{x: -15, y: 0}}
+      />
       <Title>Desativar Propagandas</Title>
       <Subtitle>
         Estou trabalhando duro para te oferecer um aplicativo de qualidade,
