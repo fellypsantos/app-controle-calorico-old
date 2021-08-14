@@ -14,6 +14,7 @@ export const AppTitle = styled.Text`
   color: #fff;
   font-family: 'Open Sans Bold';
   font-size: 30px;
+  text-align: center;
 `;
 
 export const AppDescription = styled.Text`

@@ -3,9 +3,11 @@ import Colors from '../../Colors';
 
 export const AdButtonContainer = styled.View`
   justify-content: space-between;
+  align-items: center;
   flex-direction: row;
   background-color: ${Colors.Purple.Idle};
-  padding: 10px 15px;
+  padding: 0px 15px;
+  height: 48px;
 `;
 
 export const AdButtonBlock = styled.View`

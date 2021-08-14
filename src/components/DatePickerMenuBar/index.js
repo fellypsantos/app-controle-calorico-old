@@ -62,7 +62,7 @@ const DatePickerMenuBar = () => {
         onLongPress={() => setToday()}
         delayLongPress={800}>
         <DatePickerCurrentDate>
-          {dateInHistoryTab.format('L')}
+          {dateInHistoryTab.format('LL')}
         </DatePickerCurrentDate>
       </DatePickerCurrentDateContainer>
 

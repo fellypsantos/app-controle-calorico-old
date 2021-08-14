@@ -15,6 +15,7 @@ export const Title = styled.Text`
 export const Subtitle = styled.Text`
   font-family: 'Open Sans Regular';
   padding: 10px 25px;
+  text-align: center;
 `;
 
 export const ButtonsContainer = styled.View`

@@ -17,7 +17,7 @@ import {
 } from './styles';
 
 const History = () => {
-  const {dateInHistoryTab} = useContext(ProfileContext);
+  const {dateInHistoryTab, theFoodHistory} = useContext(ProfileContext);
   const [foodListHistoryTab, setFoodListHistoryTab] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [kcalTotalValue, setKcalTotalValue] = useState(0);
@@ -40,7 +40,7 @@ const History = () => {
     });
 
     setTimeout(() => setLoading(false), 1500);
-  }, [dateInHistoryTab]);
+  }, [dateInHistoryTab, theFoodHistory]);
 
   const renderItem = ({item}) => (
     <ListItemContainer>

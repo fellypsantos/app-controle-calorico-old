@@ -23,9 +23,11 @@ const ProfileProvider = ({children}) => {
   const [theFoodHistory, setFoodHistory] = useState([]);
   const [foodHistoryDate, setFoodHistoryDate] = useState(momentjs);
   const [dateInHistoryTab, setDateInHistoryTab] = useState(momentjs);
+  const [isPremiumTime, setIsPremiumTime] = useState(false);
 
   useEffect(() => {
     console.log('LOADING CONTEXT FROM DATABASE...');
+
     Database.getProfileData(results => {
       if (results.rows.length === 1) {
         const databaseProfile = results.rows.item(0);
@@ -47,6 +49,34 @@ const ProfileProvider = ({children}) => {
         setFoodHistory(dbFoodList);
       }
     });
+
+    const handleAdMobVisibility = () => {
+      Database.getLastSeenRewardAd(result => {
+        const lastTimeStamp = result.rows.item(0).ts_moment_last_seen_reward_ad;
+        console.log('[DATABASE] getLastSeenRewardAd', lastTimeStamp);
+
+        if (lastTimeStamp !== '0') {
+          const duration = moment.duration(moment().diff(lastTimeStamp));
+          const minutes = Math.floor(duration.asMinutes());
+          console.log('[MINUTES PREMIUM PASSED]: ', minutes);
+
+          if (minutes < 1) {
+            console.log('PREMIUM IS ENABLED! NO ADS!');
+            setIsPremiumTime(true);
+          } else {
+            console.log('ADS WILL SHOWN NORMALLY!');
+            setIsPremiumTime(false);
+          }
+        }
+      });
+    };
+
+    handleAdMobVisibility();
+
+    setInterval(() => {
+      console.log('Checking premium expiration time...');
+      handleAdMobVisibility();
+    }, 5000);
   }, []);
 
   useEffect(() => {
@@ -91,6 +121,8 @@ const ProfileProvider = ({children}) => {
     setFoodHistoryDate,
     dateInHistoryTab,
     setDateInHistoryTab,
+    isPremiumTime,
+    setIsPremiumTime,
   };
 
   return (
