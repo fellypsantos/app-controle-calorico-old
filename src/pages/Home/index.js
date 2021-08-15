@@ -1,5 +1,7 @@
 import React, {useEffect, useContext} from 'react';
+import {Alert} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
+import moment from 'moment/min/moment-with-locales';
 import ScrollViewContainer from '../../components/ScrollViewContainer';
 
 import {
@@ -24,8 +26,55 @@ import AdModRewardIntro from '../AdMobRewardIntro';
 const Stack = createStackNavigator();
 
 const MainSection = ({navigation}) => {
-  const {theFoodHistory} = useContext(ProfileContext);
+  const {theFoodHistory, setFoodHistory, getDeviceLocale} = useContext(
+    ProfileContext,
+  );
   const isEmptyFoodList = theFoodHistory.length > 0;
+
+  const handleDeleteListItem = itemToDelete => {
+    console.log('itemToDelete', itemToDelete);
+
+    DataBase.deleteFoodRegistry(itemToDelete, result => {
+      console.log('DELETE RESULT', result);
+      if (result.rowsAffected > 0) {
+        // UPDATE FOOD LIST
+        const updatedList = theFoodHistory.filter(
+          item => item.id !== itemToDelete.id,
+        );
+        setFoodHistory(updatedList);
+
+        Toaster.ShowToast('Item removido com sucesso', 'SHORT');
+      }
+    });
+  };
+
+  const handleConfirmDeleteListItem = item => {
+    Alert.alert('Cuidado', 'Quer mesmo remover esse item ?', [
+      {text: 'Cancelar', onPress: () => null},
+      {text: 'Sim, quero apagar', onPress: () => handleDeleteListItem(item)},
+    ]);
+  };
+
+  const handleEditListitem = itemToEdit => {
+    console.log('itemToEdit', itemToEdit);
+    navigation.navigate('AddFoodRegistrySection', itemToEdit);
+  };
+
+  const handlePressListItem = item => {
+    const theMoment = moment(item.datetime_moment).locale(getDeviceLocale);
+
+    Alert.alert(
+      'Detalhes do Registro',
+      `Nome: ${item.name}\nCalorias: ${
+        item.kcal
+      } kcal\nData: ${theMoment.format('LL')}\nHora: ${theMoment.format('LT')}`,
+      [
+        {text: 'Excluir', onPress: () => handleConfirmDeleteListItem(item)},
+        {text: 'Editar', onPress: () => handleEditListitem(item)},
+        {text: 'Fechar', onPress: () => {}},
+      ],
+    );
+  };
 
   return (
     <ScrollViewContainer>
@@ -38,11 +87,13 @@ const MainSection = ({navigation}) => {
 
       {/* WHITE CONTAINER */}
       <BottomContainer>
-        <TopBarAddFoodRegistry navigation={navigation} />
+        <TopBarAddFoodRegistry />
         <NoFoodRegistry hidden={isEmptyFoodList} />
         <ListContainer>
           {theFoodHistory.map(item => (
-            <ListItemTouchable key={item.id} onPress={() => null}>
+            <ListItemTouchable
+              key={item.id}
+              onPress={() => handlePressListItem(item)}>
               <FoodRegistryListItem foodInformations={item} />
             </ListItemTouchable>
           ))}

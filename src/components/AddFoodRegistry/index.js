@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
+import {useRoute} from '@react-navigation/native';
 import {NativeModules, KeyboardAvoidingView, Alert} from 'react-native';
 import moment from 'moment/min/moment-with-locales';
 
@@ -32,14 +33,25 @@ const AddFoodRegistry = ({handleClose}) => {
   const [foodCategory, setFoodCategory] = useState();
   const [currentDate, setCurrentDate] = useState();
   const [show, setShow] = useState(false);
+  const [editableItem, setEditableItem] = useState();
 
+  const route = useRoute();
   const deviceLocale = NativeModules.I18nManager.localeIdentifier;
   const momentjs = moment();
   momentjs.locale(deviceLocale);
 
   useEffect(() => {
     setCurrentDate(momentjs.format());
-    console.log('UPDATED_CURRENT_DATE');
+    setEditableItem(route.params);
+
+    // IF IS EDIT MODE, POPULATE FIELDS WITH THIS DATA
+    if (route.params !== undefined) {
+      const {name, kcal, datetime_moment} = route.params;
+      setFoodName(name);
+      setFoodKcal(kcal.toString());
+      setFoodCategory();
+      setCurrentDate(moment(datetime_moment).format());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -75,17 +87,57 @@ const AddFoodRegistry = ({handleClose}) => {
       currentDateSql: momentjs.format('YYYY-MM-DD HH:mm:ss'),
     };
 
-    console.log('newFoodRegistry', newFoodRegistry);
+    const updatedFoodRegistry =
+      editableItem !== undefined
+        ? {
+            id: editableItem.id,
+            ...newFoodRegistry,
+          }
+        : null;
 
-    DataBase.addFoodRegistry(newFoodRegistry, results => {
-      setFoodHistory([
-        {
-          ...results.insertedRow,
-        },
-        ...theFoodHistory,
-      ]);
-      handleClose(false);
-    });
+    // ADD NEW REGISTRY
+    if (editableItem === undefined) {
+      console.log('ADD NEW REGISTRY', newFoodRegistry);
+      DataBase.addFoodRegistry(newFoodRegistry, results => {
+        setFoodHistory([
+          {
+            ...results.insertedRow,
+          },
+          ...theFoodHistory,
+        ]);
+        handleClose(false);
+      });
+    }
+
+    // UPDATE THE REGISTRY
+    else {
+      console.log('UPDATE FOOD REGISTRY', updatedFoodRegistry);
+
+      DataBase.updateFoodRegistry(updatedFoodRegistry, result => {
+        // console.log('updateFoodRegistry result', result);
+
+        console.log('updatedFoodRegistry', updatedFoodRegistry);
+        console.log('theFoodHistory', theFoodHistory);
+
+        const newListAfterUpdate = theFoodHistory.map(item => {
+          if (item.id === editableItem.id) {
+            return {
+              id: updatedFoodRegistry.id,
+              name: updatedFoodRegistry.foodName,
+              category_level: updatedFoodRegistry.foodCategory,
+              kcal: updatedFoodRegistry.foodKcal,
+              datatime_moment: updatedFoodRegistry.currentDateMoment,
+              datatime_sql: updatedFoodRegistry.currentDateSql,
+            };
+          }
+
+          return item;
+        });
+
+        setFoodHistory(newListAfterUpdate);
+        handleClose(false);
+      });
+    }
   };
 
   return (
@@ -106,8 +158,14 @@ const AddFoodRegistry = ({handleClose}) => {
               <Icon name="times-circle" size={18} color="#666" />
             </CloseIconBox>
           </HeaderIcons>
-          <MainTitle>Novo Registro</MainTitle>
-          <Subtitle>Adicione um registro alimentar ao seu histórico.</Subtitle>
+          <MainTitle>
+            {editableItem === undefined ? 'Novo Registro' : 'Editando Registro'}
+          </MainTitle>
+          <Subtitle>
+            {editableItem === undefined
+              ? 'Adicione um registro alimentar ao seu histórico.'
+              : 'Modifique o que precisar e não esqueça de salvar.'}
+          </Subtitle>
 
           <FormContainer>
             <FormLabelControl>Como classificaria?</FormLabelControl>

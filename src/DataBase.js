@@ -128,6 +128,52 @@ export default class DataBase {
     });
   };
 
+  static updateFoodRegistry = (foodData, callback) => {
+    this.validateConnection();
+
+    const {
+      id,
+      foodName,
+      foodKcal,
+      foodCategory,
+      currentDateMoment,
+      currentDateSql,
+    } = foodData;
+
+    const sqlData = [
+      foodName,
+      foodCategory,
+      foodKcal,
+      currentDateMoment,
+      currentDateSql,
+      id,
+    ];
+
+    this.db.transaction(tx => {
+      tx.executeSql(
+        'UPDATE food_registry SET name=?, category_level=?, kcal=?, datetime_moment=?, datetime_sql=? WHERE id=?',
+        sqlData,
+        (rx, results) => {
+          callback(results);
+        },
+      );
+    });
+  };
+
+  static deleteFoodRegistry = (foodData, callback) => {
+    this.validateConnection();
+
+    this.db.transaction(tx => {
+      tx.executeSql(
+        'DELETE FROM food_registry WHERE id=?',
+        [foodData.id],
+        (rx, results) => {
+          callback(results);
+        },
+      );
+    });
+  };
+
   static getLastSeenRewardAd = callback => {
     this.validateConnection();
 

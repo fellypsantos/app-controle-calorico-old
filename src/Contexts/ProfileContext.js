@@ -24,6 +24,7 @@ const ProfileProvider = ({children}) => {
   const [foodHistoryDate, setFoodHistoryDate] = useState(momentjs);
   const [dateInHistoryTab, setDateInHistoryTab] = useState(momentjs);
   const [isPremiumTime, setIsPremiumTime] = useState(false);
+  const [getDeviceLocale] = useState(deviceLocale);
 
   useEffect(() => {
     console.log('LOADING CONTEXT FROM DATABASE...');
@@ -73,10 +74,12 @@ const ProfileProvider = ({children}) => {
 
     handleAdMobVisibility();
 
-    setInterval(() => {
-      console.log('Checking premium expiration time...');
-      handleAdMobVisibility();
-    }, 5000);
+    if (isPremiumTime) {
+      setInterval(() => {
+        console.log('Checking premium expiration time...');
+        handleAdMobVisibility();
+      }, 5000);
+    }
   }, []);
 
   useEffect(() => {
@@ -123,6 +126,7 @@ const ProfileProvider = ({children}) => {
     setDateInHistoryTab,
     isPremiumTime,
     setIsPremiumTime,
+    getDeviceLocale,
   };
 
   return (

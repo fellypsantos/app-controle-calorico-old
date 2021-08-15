@@ -1,4 +1,5 @@
 import React, {useContext} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 import {ButtonAddFoodRegistry, Container, PhraseRegistryCount} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -6,10 +7,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {ProfileContext} from '../../Contexts/ProfileContext';
 import Colors from '../../Colors';
 
-const TopBarAddFoodRegistry = ({navigation}) => {
+const TopBarAddFoodRegistry = () => {
   const {theFoodHistory} = useContext(ProfileContext);
-
-  console.log('theFoodHistory', theFoodHistory);
+  const navigation = useNavigation();
 
   return (
     <Container>
