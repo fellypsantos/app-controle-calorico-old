@@ -1,7 +1,12 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {useRoute} from '@react-navigation/native';
 import {NativeModules, KeyboardAvoidingView, Alert} from 'react-native';
-import moment from 'moment/min/moment-with-locales';
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt';
+import 'dayjs/locale/en';
+import 'dayjs/locale/es';
+
+dayjs.extend(require('dayjs/plugin/localizedFormat'));
 
 import {
   AppSection,
@@ -25,6 +30,7 @@ import MainTitle from '../MainTitle';
 import Subtitle from '../Subtitle';
 import FormLabelControl from '../FormLabelControl';
 import DataBase from '../../DataBase';
+import DeviceLocaleHandler from '../../DeviceLocaleHandler';
 
 const AddFoodRegistry = ({handleClose}) => {
   const {theFoodHistory, setFoodHistory} = useContext(ProfileContext);
@@ -36,12 +42,11 @@ const AddFoodRegistry = ({handleClose}) => {
   const [editableItem, setEditableItem] = useState();
 
   const route = useRoute();
-  const deviceLocale = NativeModules.I18nManager.localeIdentifier;
-  const momentjs = moment();
-  momentjs.locale(deviceLocale);
+  const deviceLocale = DeviceLocaleHandler.getSupported();
+  const dayjsHandler = dayjs().locale(deviceLocale);
 
   useEffect(() => {
-    setCurrentDate(momentjs.format());
+    setCurrentDate(dayjsHandler.format());
     setEditableItem(route.params);
 
     // IF IS EDIT MODE, POPULATE FIELDS WITH THIS DATA
@@ -50,20 +55,24 @@ const AddFoodRegistry = ({handleClose}) => {
       setFoodName(name);
       setFoodKcal(kcal.toString());
       setFoodCategory();
-      setCurrentDate(moment(datetime_moment).format());
+      setCurrentDate(dayjs(datetime_moment).format());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChange = (event, selectedDate) => {
-    if (selectedDate !== undefined) {
-      setCurrentDate(moment(selectedDate).format());
-    }
     setShow(false);
+
+    if (event.type === 'set') {
+      if (selectedDate !== undefined) {
+        setCurrentDate(dayjs(selectedDate).format());
+      }
+    }
   };
 
   const handleSaveFoodRegistry = () => {
     const fieldsWithError = [];
+    setShow(false);
 
     if (foodCategory === undefined)
       fieldsWithError.push('Alimentação (leve/moderada/pesada)');
@@ -84,7 +93,7 @@ const AddFoodRegistry = ({handleClose}) => {
       foodKcal: parseInt(foodKcal, 10),
       foodCategory,
       currentDateMoment: currentDate,
-      currentDateSql: momentjs.format('YYYY-MM-DD HH:mm:ss'),
+      currentDateSql: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     };
 
     const updatedFoodRegistry =
@@ -141,13 +150,14 @@ const AddFoodRegistry = ({handleClose}) => {
   };
 
   return (
+    // eslint-disable-next-line react-native/no-inline-styles
     <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
       <Container>
         <AppSection>
           {/* DATE PICKER */}
           {show && (
             <DateTimePicker
-              value={moment(currentDate).toDate()}
+              value={dayjs(currentDate).toDate()}
               mode="time"
               onChange={onChange}
             />
@@ -193,7 +203,7 @@ const AddFoodRegistry = ({handleClose}) => {
 
             <TextInputCustom
               label="Em que momento ?"
-              value={moment(currentDate).locale(deviceLocale).calendar()}
+              value={dayjs(currentDate).locale('pt').format('LT')}
               renderAsDateTimePicker
               handleIconFunction={() => setShow(true)}
             />

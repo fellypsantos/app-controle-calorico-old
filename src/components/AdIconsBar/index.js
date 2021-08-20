@@ -10,13 +10,18 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Toaster from '../../Toaster';
 import Colors from '../../Colors';
 
+const adUnitId = {
+  DEBUG: 'ca-app-pub-3940256099942544/1033173712',
+  RELEASE: 'ca-app-pub-3444194669126701/6444212865',
+};
+
 const AdIconsBar = () => {
   const navigation = useNavigation();
   const {isPremiumTime} = useContext(ProfileContext);
   const [isLoadingAd, setLoadingAd] = useState(false);
 
   useEffect(() => {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
+    AdMobInterstitial.setAdUnitID(__DEV__ ? adUnitId.DEBUG : adUnitId.RELEASE);
     AdMobInterstitial.removeAllListeners();
 
     AdMobInterstitial.addEventListener('adClosed', () => {

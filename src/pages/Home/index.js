@@ -1,7 +1,7 @@
 import React, {useEffect, useContext} from 'react';
 import {Alert} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-import moment from 'moment/min/moment-with-locales';
+import dayjs from 'dayjs';
 import ScrollViewContainer from '../../components/ScrollViewContainer';
 
 import {
@@ -61,7 +61,7 @@ const MainSection = ({navigation}) => {
   };
 
   const handlePressListItem = item => {
-    const theMoment = moment(item.datetime_moment).locale(getDeviceLocale);
+    const theMoment = dayjs(item.datetime_moment).locale(getDeviceLocale);
 
     Alert.alert(
       'Detalhes do Registro',
@@ -110,7 +110,7 @@ const AddFoodRegistrySection = ({navigation}) => (
 const Home = () => {
   useEffect(() => {
     Toaster.ShowToast('Olá! Bom te ver por aqui.', 'SHORT');
-    DataBase.getProfileData(result => console.log('getProfileData', result));
+    DataBase.getProfileData();
   }, []);
 
   return (

@@ -27,7 +27,7 @@ export default class DataBase {
     this.validateConnection();
 
     this.db.transaction(tx => {
-      tx.executeSql('SELECT * FROM profile', null, (tx, results) => {
+      tx.executeSql('SELECT * FROM profile', null, (txi, results) => {
         callback(results);
       });
     });
@@ -66,7 +66,7 @@ export default class DataBase {
     if (isUpdating) sqlValues.push(id);
 
     this.db.transaction(tx => {
-      tx.executeSql(sqlToRun, sqlValues, (tx, results) => {
+      tx.executeSql(sqlToRun, sqlValues, (txi, results) => {
         callback(results);
       });
     });
@@ -79,7 +79,7 @@ export default class DataBase {
       tx.executeSql(
         'SELECT * FROM food_registry WHERE date(datetime_sql) = date(?) ORDER BY id DESC',
         [datetime_sql],
-        (tx, results) => {
+        (txi, results) => {
           callback(results);
         },
       );
@@ -178,7 +178,7 @@ export default class DataBase {
     this.validateConnection();
 
     this.db.transaction(tx => {
-      tx.executeSql('SELECT * FROM admob', null, (tx, results) => {
+      tx.executeSql('SELECT * FROM admob', null, (txi, results) => {
         callback(results);
       });
     });
@@ -191,7 +191,7 @@ export default class DataBase {
       tx.executeSql(
         'UPDATE admob SET ts_moment_last_seen_reward_ad=?',
         [moment_timestamp],
-        (tx, results) => {
+        (txi, results) => {
           callback(results);
         },
       );

@@ -1,9 +1,9 @@
 import React, {useState, useContext} from 'react';
-import {NativeModules} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from 'moment/min/moment-with-locales';
+import dayjs from 'dayjs';
 import Toaster from '../../Toaster';
 import {ProfileContext} from '../../Contexts/ProfileContext';
+import DeviceLocaleHandler from '../../DeviceLocaleHandler';
 
 import {
   Container,
@@ -14,31 +14,28 @@ import {
 } from './styles';
 
 const DatePickerMenuBar = () => {
-  const deviceLocale = NativeModules.I18nManager.localeIdentifier;
-  const momentjs = moment();
-  momentjs.locale(deviceLocale);
-
   const {dateInHistoryTab, setDateInHistoryTab} = useContext(ProfileContext);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const deviceLocale = DeviceLocaleHandler.getSupported();
 
   const addOneDay = () => {
     const theDay = dateInHistoryTab.add(1, 'days');
-    setDateInHistoryTab(moment(theDay));
+    setDateInHistoryTab(dayjs(theDay));
   };
 
   const subOneDay = () => {
     const theDay = dateInHistoryTab.subtract(1, 'days');
-    setDateInHistoryTab(moment(theDay));
+    setDateInHistoryTab(dayjs(theDay));
   };
 
   const setToday = () => {
-    setDateInHistoryTab(momentjs);
+    setDateInHistoryTab(dayjs().locale(deviceLocale));
     Toaster.ShowToast('Ótimo! A data voltou para hoje :)');
   };
 
   const handleDateTimePickerChange = (event, selectedDate) => {
     if (selectedDate !== undefined) {
-      setDateInHistoryTab(moment(selectedDate).locale(deviceLocale));
+      setDateInHistoryTab(dayjs(selectedDate).locale(deviceLocale));
     }
     setShowDatePicker(false);
   };

@@ -1,5 +1,6 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator} from 'react-native';
+import {CommonActions} from '@react-navigation/native';
 
 import {
   Container,
@@ -9,28 +10,35 @@ import {
   AppStart,
   AppStartText,
 } from './styles';
+
+import DataBase from '../../DataBase';
 import AppLogoSource from '../../../assets/images/eating.png';
 
-import {ProfileContext} from '../../Contexts/ProfileContext';
-
 const SplashScreen = ({navigation}) => {
-  const {theProfile} = useContext(ProfileContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (theProfile.id !== undefined) {
-      setTimeout(() => {
-        // OPEN HOME
-        navigation.navigate('EntryPoint');
-      }, 1000);
-    } else {
-      setTimeout(() => {
-        // STAY HERE TO REGISTER
-        setLoading(false);
-      }, 2000);
-    }
+    const isHermes = () => !!global.HermesInternal;
+    console.log('Hermes active?', isHermes);
+
+    setTimeout(() => {
+      DataBase.getProfileData(result => {
+        if (result.rows.length > 0) {
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [
+                {
+                  name: 'EntryPoint',
+                },
+              ],
+            }),
+          );
+        } else setLoading(false);
+      });
+    }, 1800);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [theProfile]);
+  }, []);
 
   return (
     <Container>

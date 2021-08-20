@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext, useRef} from 'react';
 import {Alert, ActivityIndicator} from 'react-native';
 import {AdMobRewarded} from 'react-native-admob';
 import {useNavigation} from '@react-navigation/native';
-import moment from 'moment/min/moment-with-locales';
+import dayjs from 'dayjs';
 import ConfettiCannon from 'react-native-confetti-cannon';
 
 import DataBase from '../../DataBase';
@@ -18,6 +18,11 @@ import {
 } from './styles';
 import Colors from '../../Colors';
 
+const adUnitId = {
+  DEBUG: 'ca-app-pub-3940256099942544/5224354917',
+  RELEASE: 'ca-app-pub-3444194669126701/9826012534',
+};
+
 const AdModRewardIntro = () => {
   const navigation = useNavigation();
   const [userRewarded, setUserRewarded] = useState(false);
@@ -28,7 +33,7 @@ const AdModRewardIntro = () => {
 
   useEffect(() => {
     // Display a rewarded ad
-    AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917');
+    AdMobRewarded.setAdUnitID(__DEV__ ? adUnitId.DEBUG : adUnitId.RELEASE);
     AdMobRewarded.removeAllListeners();
 
     // INFORM THE STATE THE REWARD WAS RECEIVED
@@ -40,22 +45,20 @@ const AdModRewardIntro = () => {
     // WHEN VIDEO IS CLOSED, CHECK IF WAS REWARDED
     AdMobRewarded.addEventListener('adClosed', result => {
       if (userRewarded) {
-        console.log('COOOL! Ads were disabled for 6 hours!');
+        console.log('COOOL! Ads were disabled for 4 hours!');
 
         // Update Database
-        DataBase.setLastSeenRewardAd(moment().format(), lastTimeStamp => {
+        DataBase.setLastSeenRewardAd(dayjs().format(), lastTimeStamp => {
           console.log('DataBase.setLastSeenRewardAd', lastTimeStamp);
 
           // Update app to hide all ads
           setIsPremiumTime(true);
-
-          console.log('useRef', confettiCannon.current);
           confettiCannon.current.start();
 
           // Show Alert and close window
           Alert.alert(
             'Parabéns!',
-            'Aproveite o app sem propagandas por 6 horas.',
+            'Aproveite o app sem propagandas por 4 horas.',
             [{text: 'OK', onPress: () => navigation.goBack()}],
           );
         });

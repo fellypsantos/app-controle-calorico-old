@@ -1,7 +1,7 @@
 import React, {createContext, useState, useEffect} from 'react';
-import {NativeModules} from 'react-native';
+import dayjs from 'dayjs';
 import Database from '../DataBase';
-import moment from 'moment/min/moment-with-locales';
+import DeviceLocaleHandler from '../DeviceLocaleHandler';
 
 export const ProfileContext = createContext();
 
@@ -16,70 +16,58 @@ const ProfileProvider = ({children}) => {
     activity_factor: 1.2,
   });
 
-  const deviceLocale = NativeModules.I18nManager.localeIdentifier;
-  const momentjs = moment();
-  momentjs.locale(deviceLocale);
+  const deviceLocale = DeviceLocaleHandler.getSupported();
+  const dayjsHandler = dayjs().locale(deviceLocale);
 
   const [theFoodHistory, setFoodHistory] = useState([]);
-  const [foodHistoryDate, setFoodHistoryDate] = useState(momentjs);
-  const [dateInHistoryTab, setDateInHistoryTab] = useState(momentjs);
+  const [foodHistoryDate, setFoodHistoryDate] = useState(dayjsHandler);
+  const [dateInHistoryTab, setDateInHistoryTab] = useState(dayjsHandler);
   const [isPremiumTime, setIsPremiumTime] = useState(false);
+  const [intervalHandler, setIntervalHandler] = useState(null);
   const [getDeviceLocale] = useState(deviceLocale);
+
+  const handleAdMobVisibility = () => {
+    Database.getLastSeenRewardAd(result => {
+      const lastTimeStamp = result.rows.item(0).ts_moment_last_seen_reward_ad;
+
+      if (lastTimeStamp !== '0') {
+        const minutes = dayjs().diff(lastTimeStamp, 'minutes');
+        console.log('[MINUTES PREMIUM PASSED]: ', minutes);
+
+        // 240 min -> 4h
+        if (minutes < 240) {
+          // console.log('PREMIUM IS ENABLED! NO ADS!');
+          setIsPremiumTime(true);
+        } else {
+          // console.log('ADS WILL SHOWN NORMALLY!');
+          setIsPremiumTime(false);
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     console.log('LOADING CONTEXT FROM DATABASE...');
 
+    // LOAD PROFILE
     Database.getProfileData(results => {
       if (results.rows.length === 1) {
         const databaseProfile = results.rows.item(0);
-        console.log('databaseProfile', databaseProfile);
-
         setProfile({
           ...databaseProfile,
         });
-
-        console.log('LOADED PROFILE FROM DATABASE.');
-      } else {
-        console.log('NO PROFILE FOUND!');
       }
     });
 
-    Database.getFoodHistory(moment().format('YYYY-MM-DD'), res => {
+    // LOAD FOOD HISTORY
+    Database.getFoodHistory(dayjs().format('YYYY-MM-DD'), res => {
       if (res.rows.length > 0) {
         const dbFoodList = res.rows.raw();
         setFoodHistory(dbFoodList);
       }
     });
 
-    const handleAdMobVisibility = () => {
-      Database.getLastSeenRewardAd(result => {
-        const lastTimeStamp = result.rows.item(0).ts_moment_last_seen_reward_ad;
-        console.log('[DATABASE] getLastSeenRewardAd', lastTimeStamp);
-
-        if (lastTimeStamp !== '0') {
-          const duration = moment.duration(moment().diff(lastTimeStamp));
-          const minutes = Math.floor(duration.asMinutes());
-          console.log('[MINUTES PREMIUM PASSED]: ', minutes);
-
-          if (minutes < 1) {
-            console.log('PREMIUM IS ENABLED! NO ADS!');
-            setIsPremiumTime(true);
-          } else {
-            console.log('ADS WILL SHOWN NORMALLY!');
-            setIsPremiumTime(false);
-          }
-        }
-      });
-    };
-
     handleAdMobVisibility();
-
-    if (isPremiumTime) {
-      setInterval(() => {
-        console.log('Checking premium expiration time...');
-        handleAdMobVisibility();
-      }, 5000);
-    }
   }, []);
 
   useEffect(() => {
@@ -113,6 +101,19 @@ const ProfileProvider = ({children}) => {
       }
     }
   }, [theProfile]);
+
+  useEffect(() => {
+    if (isPremiumTime && intervalHandler === null) {
+      const theIntervalHandler = setInterval(() => {
+        // Checking premium expiration time
+        handleAdMobVisibility();
+      }, 5000);
+      setIntervalHandler(theIntervalHandler);
+    } else if (!isPremiumTime && intervalHandler !== null) {
+      clearInterval(intervalHandler);
+      setIntervalHandler(null);
+    }
+  }, [isPremiumTime, intervalHandler]);
 
   // Context Values
   const ContextValues = {

@@ -55,6 +55,7 @@ const History = () => {
         <ActivityIndicator
           color={Colors.Purple.Idle}
           size={30}
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{marginTop: 25}}
         />
       ) : foodListHistoryTab.length === 0 ? (
