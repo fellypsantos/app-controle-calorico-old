@@ -106,7 +106,7 @@ const AdModRewardIntro = () => {
         final.
       </Subtitle>
       <Subtitle>
-        Em troca você recebe 6 horas de acesso sem propagandas no app, ficarei
+        Em troca você recebe 4 horas de acesso sem propagandas no app, ficarei
         muito grato se puder me dar essa força ♥
       </Subtitle>
 
