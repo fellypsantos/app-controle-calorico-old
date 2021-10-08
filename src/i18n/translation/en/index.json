@@ -1,0 +1,135 @@
+{
+  "AdMob": {
+    "Paragraph1": "I'm working hard to offer you a high quality app, simple and useful. You can support this work by watching an advertising.",
+    "Paragraph2": "As gift you get 4 hours to use the app without advertising. I'll be very grateful if you could help.",
+    "Title": {
+      "DisableAds": "Disable Advertising"
+    }
+  },
+  "Alert": {
+    "Caution": "Caution",
+    "Message": {
+      "ConfirmRemoveItem": "Really want to remove this item?",
+      "FailedToLoadAd": "Failed to load the advertising, but you can try again.",
+      "FillCorrectlyFieldsBelow": "Please, fill correctly the fields below.",
+      "NeedFillTheFields": "You need fill the fields:"
+    },
+    "Warning": "Attention"
+  },
+  "App": {
+    "Description": "You have in your hands a simple and practical control of your meals.",
+    "Name": "Calories Counter"
+  },
+  "BottomTab": {
+    "History": "Historic",
+    "Home": "Home",
+    "Settings": "Settings"
+  },
+  "Buttons": {
+    "Back": "Back",
+    "SaveRegistry": "Save Registry",
+    "SaveSettings": "Save Settings",
+    "StartNow": "Start Now",
+    "WatchNow": "Watch Now"
+  },
+  "Consumed": "Consumed",
+  "CountTotalMealsRegistered": "You've write down **COUNT** **REGISTRY** today.",
+  "Food": {
+    "Category": {
+      "FullLabelAllTypes": "Food (light/moderate/heavy)",
+      "Heavy": "Heavy",
+      "Light": "Light",
+      "Moderate": "Moderate"
+    },
+    "Heavy": "Heavy Food",
+    "Light": "Light Food.",
+    "Moderate": "Moderate Food"
+  },
+  "Max": "Maximum",
+  "Min": "Minimum",
+  "Modal": {
+    "Button": {
+      "Cancel": "Cancel",
+      "Close": "Close",
+      "Delete": "Delete",
+      "Edit": "Edit",
+      "YesWantDelete": "Yes, I want delete"
+    },
+    "Label": {
+      "Calories": "Calories",
+      "Date": "Date",
+      "Hour": "Hour",
+      "Name": "Name"
+    },
+    "Title": {
+      "RegistryDetails": "Registry Details"
+    }
+  },
+  "NewRegistry": {
+    "Edit": {
+      "Description": "Modify what you need, don't forget to save.",
+      "Title": "Editing Registry"
+    },
+    "Fields": {
+      "HowManyCalories": "How many calories?",
+      "WhatDoYouEat": "What do you eat?",
+      "WhichCategory": "Which category?",
+      "WhichMoment": "Which moment?"
+    },
+    "New": {
+      "Description": "Add a food registry to your historic.",
+      "Title": "New Registry"
+    }
+  },
+  "NoRegistersHere": "No registers found here.",
+  "RegistryPlural": "registries",
+  "RegistrySingular": "registry",
+  "Settings": {
+    "ActivityProfile": "What's your current profile?",
+    "Age": "Age:",
+    "Description": "Adjust your information at any time.",
+    "Gender": "Gender:",
+    "Height": "Height (cm):",
+    "Name": "Your name:",
+    "Options": {
+      "ActivityFactor": {
+        "ExtremelyActive": {
+          "Description": "Daily intense exercise",
+          "Title": "Extremely active"
+        },
+        "HighlyActive": {
+          "Description": "Intense exercises, 5 at 6 days/week",
+          "Title": "Highly active"
+        },
+        "LightActive": {
+          "Description": "Light exercises, 1 at 3 days/week",
+          "Title": "Lightly active"
+        },
+        "ModerateActive": {
+          "Description": "Sports, 3 at 5 days/week",
+          "Title": "Moderately active"
+        },
+        "Sedentary": {
+          "Description": "Little or no exercise",
+          "Title": "Sedentary"
+        }
+      },
+      "Gender": {
+        "Female": "Female",
+        "Male": "Male"
+      }
+    },
+    "ProfilePhrase": "Profile phrase:",
+    "Title": "Settings",
+    "Weight": "Weight (Kg):"
+  },
+  "Toast": {
+    "DateReturnedToToday": "Great! Date returned to today.",
+    "DeveloperIsHappy": "O developer thanks you for your generosity <3",
+    "InformationsUpdated": "Your informations were updated.",
+    "ItemRemoved": "Item successfully removed.",
+    "Welcome": "Hi! Good to see you here."
+  },
+  "TotalCaloriesInList": "Total calories on the list is",
+  "WriteDownFirstMeal": "Write down your first meal."
+}

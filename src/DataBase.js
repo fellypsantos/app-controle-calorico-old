@@ -11,7 +11,7 @@ export default class DataBase {
         () => {
           console.log('DATABASE SUCCESSFULLY OPENED!');
         },
-        err => Alert.alert('PUTZ!', 'Erro ao abrir o banco de dados.\n', err),
+        err => Alert.alert('PUTZ!', 'Failed to open database.\n', err),
       );
     }
     return this.db;

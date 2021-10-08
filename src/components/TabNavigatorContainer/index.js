@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -8,10 +8,12 @@ import Settings from '../../pages/Settings';
 import Colors from '../../Colors';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {ProfileContext} from '../../Contexts/ProfileContext';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigatorContainer = () => {
+  const {Translator} = useContext(ProfileContext);
   const tabBarOptions = {
     activeTintColor: Colors.Purple.Idle,
     activeBackgroundColor: '#fff',
@@ -45,19 +47,19 @@ const TabNavigatorContainer = () => {
       <Tab.Screen
         name="Home"
         component={Home}
-        options={{tabBarLabel: 'Inicio'}}
+        options={{tabBarLabel: Translator('BottomTab.Home')}}
       />
 
       <Tab.Screen
         name="History"
         component={History}
-        options={{tabBarLabel: 'Histórico'}}
+        options={{tabBarLabel: Translator('BottomTab.History')}}
       />
 
       <Tab.Screen
         name="Settings"
         component={Settings}
-        options={{tabBarLabel: 'Configurações'}}
+        options={{tabBarLabel: Translator('BottomTab.Settings')}}
         initialParams={{isFirstRun: false}}
       />
     </Tab.Navigator>

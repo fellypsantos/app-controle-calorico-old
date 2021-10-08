@@ -29,7 +29,7 @@ const AdModRewardIntro = () => {
   const [isLoadingAd, setLoadingAd] = useState(false);
   const confettiCannon = useRef();
 
-  const {setIsPremiumTime} = useContext(ProfileContext);
+  const {setIsPremiumTime, Translator} = useContext(ProfileContext);
 
   useEffect(() => {
     // Display a rewarded ad
@@ -75,10 +75,7 @@ const AdModRewardIntro = () => {
 
   const handleAdMobRewardedError = error => {
     console.log('AdMobRewarded request error!', error);
-    Alert.alert(
-      'Ops!',
-      'Ocorreu um erro no carregamento da propaganda, mas você pode tentar novamente.',
-    );
+    Alert.alert('Ops!', 'Alert.Message.FailedToLoadAd');
   };
 
   const handleShowRewardAd = () => {
@@ -99,20 +96,15 @@ const AdModRewardIntro = () => {
         autoStart={false}
         origin={{x: -15, y: 0}}
       />
-      <Title>Desativar Propagandas</Title>
-      <Subtitle>
-        Estou trabalhando duro para te oferecer um aplicativo de qualidade,
-        simples e útil, você pode apoiar esse trabalho assistindo um vídeo até o
-        final.
-      </Subtitle>
-      <Subtitle>
-        Em troca você recebe 4 horas de acesso sem propagandas no app, ficarei
-        muito grato se puder me dar essa força ♥
-      </Subtitle>
+      <Title>{Translator('AdMob.Title.DisableAds')}</Title>
+      <Subtitle>{Translator('AdMob.Paragraph1')}</Subtitle>
+      <Subtitle>{Translator('AdMob.Paragraph2')} ♥</Subtitle>
 
       <ButtonsContainer>
         <ActionButton showAsCancel onPress={() => navigation.goBack()}>
-          <ActionButtonText showAsCancel>Voltar</ActionButtonText>
+          <ActionButtonText showAsCancel>
+            {Translator('Buttons.Back')}
+          </ActionButtonText>
         </ActionButton>
         {isLoadingAd ? (
           <ActivityIndicator
@@ -122,7 +114,9 @@ const AdModRewardIntro = () => {
           />
         ) : (
           <ActionButton onPress={handleShowRewardAd}>
-            <ActionButtonText>Assistir Agora</ActionButtonText>
+            <ActionButtonText>
+              {Translator('Buttons.WatchNow')}
+            </ActionButtonText>
           </ActionButton>
         )}
       </ButtonsContainer>

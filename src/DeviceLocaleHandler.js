@@ -3,7 +3,7 @@ import {NativeModules} from 'react-native';
 export default {
   getSupported: () => {
     const currentDeviceLocale = NativeModules.I18nManager.localeIdentifier;
-    console.log('currentDeviceLocale', currentDeviceLocale);
+    // console.log('currentDeviceLocale', currentDeviceLocale);
 
     const sanitizantedLocale = currentDeviceLocale
       .replace('_', '-')

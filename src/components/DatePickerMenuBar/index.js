@@ -14,7 +14,7 @@ import {
 } from './styles';
 
 const DatePickerMenuBar = () => {
-  const {dateInHistoryTab, setDateInHistoryTab} = useContext(ProfileContext);
+  const {dateInHistoryTab, setDateInHistoryTab, Translator} = useContext(ProfileContext);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const deviceLocale = DeviceLocaleHandler.getSupported();
 
@@ -30,7 +30,7 @@ const DatePickerMenuBar = () => {
 
   const setToday = () => {
     setDateInHistoryTab(dayjs().locale(deviceLocale));
-    Toaster.ShowToast('Ótimo! A data voltou para hoje :)');
+    Toaster.ShowToast(Translator('Toast.DateReturnedToToday'));
   };
 
   const handleDateTimePickerChange = (event, selectedDate) => {

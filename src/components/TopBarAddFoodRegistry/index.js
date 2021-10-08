@@ -8,17 +8,28 @@ import {ProfileContext} from '../../Contexts/ProfileContext';
 import Colors from '../../Colors';
 
 const TopBarAddFoodRegistry = () => {
-  const {theFoodHistory} = useContext(ProfileContext);
+  const {theFoodHistory, Translator} = useContext(ProfileContext);
   const navigation = useNavigation();
+  const foodHistoryLength = theFoodHistory.length;
+
+  // CountTotalMealsRegistered
+
+  const registryCounterString = Translator('CountTotalMealsRegistered');
+  const registryCounterStringReplaced = registryCounterString
+    .replace('**COUNT**', foodHistoryLength)
+    .replace(
+      '**REGISTRY**',
+      foodHistoryLength === 1
+        ? Translator('RegistrySingular')
+        : Translator('RegistryPlural'),
+    );
 
   return (
     <Container>
       <PhraseRegistryCount>
-        {theFoodHistory.length === 0
-          ? 'Anote a sua primeira refeição.'
-          : `Você anotou ${theFoodHistory.length} registro${
-              theFoodHistory.length !== 1 ? 's' : ''
-            } hoje.`}
+        {foodHistoryLength === 0
+          ? Translator('WriteDownFirstMeal')
+          : registryCounterStringReplaced}
       </PhraseRegistryCount>
 
       <ButtonAddFoodRegistry

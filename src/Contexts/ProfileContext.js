@@ -3,9 +3,14 @@ import dayjs from 'dayjs';
 import Database from '../DataBase';
 import DeviceLocaleHandler from '../DeviceLocaleHandler';
 
+// Multilanguage implementation
+import {useTranslation} from 'react-i18next';
+
 export const ProfileContext = createContext();
 
 const ProfileProvider = ({children}) => {
+  const {t: Translator} = useTranslation();
+
   const [theProfile, setProfile] = useState({
     name: '',
     phrase: '',
@@ -128,6 +133,7 @@ const ProfileProvider = ({children}) => {
     isPremiumTime,
     setIsPremiumTime,
     getDeviceLocale,
+    Translator,
   };
 
   return (

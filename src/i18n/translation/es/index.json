@@ -1,0 +1,135 @@
+{
+  "AdMob": {
+    "Paragraph1": "Estoy trabajando duro para ofrecerte una aplicación de alta calidad, sencilla y útil. Puede apoyar este trabajo viendo un anuncio.",
+    "Paragraph2": "Como regalo obtienes 4 horas para usar la aplicación sin publicidad. Estaré muy agradecido si pudiera ayudar.",
+    "Title": {
+      "DisableAds": "Desactivar Publicidad"
+    }
+  },
+  "Alert": {
+    "Caution": "Precaución",
+    "Message": {
+      "ConfirmRemoveItem": "¿Realmente quieres eliminar este elemento?",
+      "FailedToLoadAd": "No se pudo cargar la publicidad, pero puede intentarlo de nuevo.",
+      "FillCorrectlyFieldsBelow": "Por favor, complete correctamente los campos a continuación.",
+      "NeedFillTheFields": "Necesitas llenar los campos:"
+    },
+    "Warning": "Atención"
+  },
+  "App": {
+    "Description": "Tienes en tus manos un sencillo y práctico control de tus comidas.",
+    "Name": "Contador de Calorías"
+  },
+  "BottomTab": {
+    "History": "Histórico",
+    "Home": "Inicio",
+    "Settings": "Ajustes"
+  },
+  "Buttons": {
+    "Back": "Regresa",
+    "SaveRegistry": "Guardar registro",
+    "SaveSettings": "Guardar Ajustes",
+    "StartNow": "Empezar Ahora",
+    "WatchNow": "Ver ahora"
+  },
+  "Consumed": "Consumado",
+  "CountTotalMealsRegistered": "Has anotado **COUNT** **REGISTRY** hoje.",
+  "Food": {
+    "Category": {
+      "FullLabelAllTypes": "Alimentación (leve/moderada/pesada)",
+      "Heavy": "Pesada",
+      "Light": "Leve",
+      "Moderate": "Moderada"
+    },
+    "Heavy": "Alimentación pesada.",
+    "Light": "Alimentación leve.",
+    "Moderate": "Comida Moderada"
+  },
+  "Max": "Máximo",
+  "Min": "Mínimo",
+  "Modal": {
+    "Button": {
+      "Cancel": "Cancelar",
+      "Close": "Cerrar",
+      "Delete": "Borrar",
+      "Edit": "Editar",
+      "YesWantDelete": "Si quiero borrar"
+    },
+    "Label": {
+      "Calories": "Calorías",
+      "Date": "Fecha",
+      "Hour": "Hora",
+      "Name": "Nombre"
+    },
+    "Title": {
+      "RegistryDetails": "Detalles del registro"
+    }
+  },
+  "NewRegistry": {
+    "Edit": {
+      "Description": "Modifica lo que necesites, no olvides guardar.",
+      "Title": "Editar registro"
+    },
+    "Fields": {
+      "HowManyCalories": "Cuantas calorías?",
+      "WhatDoYouEat": "Que es lo que tú comes?",
+      "WhichCategory": "¿Qué categoría?",
+      "WhichMoment": "En que momento"
+    },
+    "New": {
+      "Description": "Agregue un registro de alimentos a su historial.",
+      "Title": "Nuevo registro"
+    }
+  },
+  "NoRegistersHere": "No se encontraron registros aquí.",
+  "RegistryPlural": "registros",
+  "RegistrySingular": "registro",
+  "Settings": {
+    "ActivityProfile": "¿Cuál es tu perfil actual?",
+    "Age": "La edad:",
+    "Description": "Ajusta tu información en cualquier momento.",
+    "Gender": "Género:",
+    "Height": "Altura (cm):",
+    "Name": "Tu nombre:",
+    "Options": {
+      "ActivityFactor": {
+        "ExtremelyActive": {
+          "Description": "Ejercicio intenso diario",
+          "Title": "Extremadamente activo"
+        },
+        "HighlyActive": {
+          "Description": "Ejercicios intensos, 5 a 6 días/semana",
+          "Title": "Altamente activo"
+        },
+        "LightActive": {
+          "Description": "Ejercicios ligeros, 1 a 3 días/semana",
+          "Title": "Ligeramente activo"
+        },
+        "ModerateActive": {
+          "Description": "Deportes, 3 a 5 días/semana",
+          "Title": "Moderadamente activo"
+        },
+        "Sedentary": {
+          "Description": "Poco o nada de ejercicio",
+          "Title": "Sedentário"
+        }
+      },
+      "Gender": {
+        "Female": "Femenino",
+        "Male": "Masculino"
+      }
+    },
+    "ProfilePhrase": "Frase de perfil:",
+    "Title": "Ajustes",
+    "Weight": "Peso (Kg):"
+  },
+  "Toast": {
+    "DateReturnedToToday": "¡Excelente! Fecha regresada a hoy.",
+    "DeveloperIsHappy": "O desarrollador te agradece tu generosidad <3",
+    "InformationsUpdated": "Se actualizó su información.",
+    "ItemRemoved": "Elemento eliminado correctamente.",
+    "Welcome": "¡Hola! Que bueno verte aquí."
+  },
+  "TotalCaloriesInList": "El total de calorías en la lista es",
+  "WriteDownFirstMeal": "Anote su primera comida."
+}

@@ -5,9 +5,9 @@ export default {
     ToastAndroid.showWithGravityAndOffset(
       text,
       duration === 'SHORT' ? ToastAndroid.SHORT : ToastAndroid.LONG,
-      ToastAndroid.TOP,
+      ToastAndroid.BOTTOM,
       0,
-      5,
+      160,
     );
   },
 };

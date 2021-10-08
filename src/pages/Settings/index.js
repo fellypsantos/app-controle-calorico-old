@@ -14,44 +14,60 @@ import Toaster from '../../Toaster';
 
 import {ButtonsContainer, Container, MainView} from './styles';
 
-const genderOptions = [
-  {label: 'Masculino', value: 'M'},
-  {label: 'Feminino', value: 'F'},
-];
-
-const activity_factorOptions = [
-  {
-    label: 'Sedentário',
-    description: 'Pouco ou nenhum exercício',
-    value: 1.2,
-  },
-  {
-    label: 'Levemente ativo',
-    description: 'Exercício leve, 1 a 3 dias/semana',
-    value: 1.375,
-  },
-  {
-    label: 'Moderadamente ativo',
-    description: 'Esportes 3 a 5 dias/semana',
-    value: 1.55,
-  },
-  {
-    label: 'Muito ativo',
-    description: 'Exercicio itenso 5 a 6 dias/semana',
-    value: 1.725,
-  },
-  {
-    label: 'Extremamente ativo',
-    description: 'Exercício intenso diário',
-    value: 1.9,
-  },
-];
-
 const Settings = ({navigation, route}) => {
   const {params} = route;
 
   // CONTEXT
-  const {theProfile, setProfile} = useContext(ProfileContext);
+  const {theProfile, setProfile, Translator} = useContext(ProfileContext);
+  const labelName = Translator('Settings.Name');
+  const labelHeight = Translator('Settings.Height');
+  const labelWeight = Translator('Settings.Weight');
+  const labelAge = Translator('Settings.Age');
+
+  const genderOptions = [
+    {label: Translator('Settings.Options.Gender.Male'), value: 'M'},
+    {label: Translator('Settings.Options.Gender.Female'), value: 'F'},
+  ];
+
+  const activity_factorOptions = [
+    {
+      label: Translator('Settings.Options.ActivityFactor.Sedentary.Title'),
+      description: Translator(
+        'Settings.Options.ActivityFactor.Sedentary.Description',
+      ),
+      value: 1.2,
+    },
+    {
+      label: Translator('Settings.Options.ActivityFactor.LightActive.Title'),
+      description: Translator(
+        'Settings.Options.ActivityFactor.LightActive.Description',
+      ),
+      value: 1.375,
+    },
+    {
+      label: Translator('Settings.Options.ActivityFactor.ModerateActive.Title'),
+      description: Translator(
+        'Settings.Options.ActivityFactor.ModerateActive.Description',
+      ),
+      value: 1.55,
+    },
+    {
+      label: Translator('Settings.Options.ActivityFactor.HighlyActive.Title'),
+      description: Translator(
+        'Settings.Options.ActivityFactor.HighlyActive.Description',
+      ),
+      value: 1.725,
+    },
+    {
+      label: Translator(
+        'Settings.Options.ActivityFactor.ExtremelyActive.Title',
+      ),
+      description: Translator(
+        'Settings.Options.ActivityFactor.ExtremelyActive.Description',
+      ),
+      value: 1.9,
+    },
+  ];
 
   // STATE
   const [profileSettings, setProfileSettings] = useState(theProfile);
@@ -62,7 +78,6 @@ const Settings = ({navigation, route}) => {
 
   // EFFECT
   useEffect(() => {
-    console.log('Settings screen: theProfile changed... RELOAD!', theProfile);
     setProfileSettings(theProfile);
     setGender(theProfile.gender);
     setActivityFactor(theProfile.activity_factor);
@@ -85,17 +100,17 @@ const Settings = ({navigation, route}) => {
 
     const emptyFields = [];
 
-    if (name === '') emptyFields.push('Seu nome');
-    if (weight === '') emptyFields.push('Peso');
-    if (height === '') emptyFields.push('Altura');
-    if (age === '') emptyFields.push('Idade');
+    if (name === '') emptyFields.push(labelName);
+    if (weight === '') emptyFields.push(labelWeight);
+    if (height === '') emptyFields.push(labelHeight);
+    if (age === '') emptyFields.push(labelAge);
 
     if (emptyFields.length > 0) {
       Alert.alert(
-        'Atenção!',
-        `Por gentileza, preencha corretamente os campos abaixo.\n\n${emptyFields.join(
-          ', ',
-        )}`,
+        Translator('Alert.Warning'),
+        `${Translator(
+          'Alert.Message.FillCorrectlyFieldsBelow',
+        )}\n\n${emptyFields.join(', ')}`,
       );
       return false;
     }
@@ -105,11 +120,11 @@ const Settings = ({navigation, route}) => {
     }
 
     if (!isNaN(height)) {
-      validHeight = parseInt(height);
+      validHeight = parseInt(height, 10);
     }
 
     if (!isNaN(age)) {
-      validAge = parseInt(age);
+      validAge = parseInt(age, 10);
     }
 
     const preparedProfileData = {
@@ -126,7 +141,7 @@ const Settings = ({navigation, route}) => {
 
     setProfile(preparedProfileData);
 
-    Toaster.ShowToast('Suas informações foram atualizadas.', 'SHORT');
+    Toaster.ShowToast(Translator('Toast.InformationsUpdated'), 'SHORT');
 
     // FIRST TIME
     if (params.isFirstRun) {
@@ -155,11 +170,11 @@ const Settings = ({navigation, route}) => {
       <Container>
         <MainView>
           <Icon name="user-alt" size={40} color={Colors.Purple.Idle} />
-          <MainTitle>Configurações</MainTitle>
-          <Subtitle>Ajuste as suas informações a qualquer momento.</Subtitle>
+          <MainTitle>{Translator('Settings.Title')}</MainTitle>
+          <Subtitle>{Translator('Settings.Description')}</Subtitle>
 
           <TextInputCustom
-            label="Seu nome:"
+            label={labelName}
             value={profileSettings.name}
             placeholder="Jhon Doe"
             onChange={text => onChangeProfileSettings('name', text)}
@@ -168,7 +183,7 @@ const Settings = ({navigation, route}) => {
           />
 
           <TextInputCustom
-            label="Frase de perfil:"
+            label={Translator('Settings.ProfilePhrase')}
             value={profileSettings.phrase}
             placeholder="Keep strong and focused!"
             onChange={text => onChangeProfileSettings('phrase', text)}
@@ -177,7 +192,7 @@ const Settings = ({navigation, route}) => {
           />
 
           <TextInputCustom
-            label="Peso (Kg):"
+            label={labelWeight}
             value={profileSettings.weight.toString()}
             placeholder="50"
             keyboardType="numeric"
@@ -189,7 +204,7 @@ const Settings = ({navigation, route}) => {
           />
 
           <TextInputCustom
-            label="Altura (cm):"
+            label={labelHeight}
             value={profileSettings.height.toString()}
             placeholder="165"
             keyboardType="numeric"
@@ -199,7 +214,7 @@ const Settings = ({navigation, route}) => {
           />
 
           <TextInputCustom
-            label="Idade:"
+            label={labelAge}
             value={profileSettings.age.toString()}
             placeholder="26"
             keyboardType="numeric"
@@ -209,7 +224,7 @@ const Settings = ({navigation, route}) => {
           />
 
           <Picker
-            label="Sexo:"
+            label={Translator('Settings.Gender')}
             selectedValue={gender}
             onValueChange={(itemValue, itemIndex) => {
               setGender(itemValue);
@@ -218,7 +233,7 @@ const Settings = ({navigation, route}) => {
           />
 
           <Picker
-            label="O que se considera?"
+            label={Translator('Settings.ActivityProfile')}
             selectedValue={currentActivityFactor}
             onValueChange={(itemValue, itemIndex) => {
               console.log('setActivityFactor', itemValue);
@@ -236,7 +251,10 @@ const Settings = ({navigation, route}) => {
           </Subtitle>
 
           <ButtonsContainer>
-            <ButtonDefault text="Salvar Dados" onPress={handleUpdateProfile} />
+            <ButtonDefault
+              text={Translator('Buttons.SaveSettings')}
+              onPress={handleUpdateProfile}
+            />
           </ButtonsContainer>
         </MainView>
       </Container>

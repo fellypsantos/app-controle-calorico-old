@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {useRoute} from '@react-navigation/native';
-import {NativeModules, KeyboardAvoidingView, Alert} from 'react-native';
+import {KeyboardAvoidingView, Alert} from 'react-native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt';
 import 'dayjs/locale/en';
@@ -20,7 +20,6 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import TextInputCustom from '../TextInputCustom';
-import FoodCategoryOptions from '../../FoodCategoryOptions';
 
 import {ProfileContext} from '../../Contexts/ProfileContext';
 import Colors from '../../Colors';
@@ -33,7 +32,9 @@ import DataBase from '../../DataBase';
 import DeviceLocaleHandler from '../../DeviceLocaleHandler';
 
 const AddFoodRegistry = ({handleClose}) => {
-  const {theFoodHistory, setFoodHistory} = useContext(ProfileContext);
+  const {theFoodHistory, setFoodHistory, Translator} = useContext(
+    ProfileContext,
+  );
   const [foodName, setFoodName] = useState('');
   const [foodKcal, setFoodKcal] = useState('');
   const [foodCategory, setFoodCategory] = useState();
@@ -44,6 +45,31 @@ const AddFoodRegistry = ({handleClose}) => {
   const route = useRoute();
   const deviceLocale = DeviceLocaleHandler.getSupported();
   const dayjsHandler = dayjs().locale(deviceLocale);
+
+  const labelWhatDoYouEat = Translator('NewRegistry.Fields.WhatDoYouEat');
+  const labelHowManyCalories = Translator('NewRegistry.Fields.HowManyCalories');
+
+  // put food category options here
+  const FoodCategoryOptions = [
+    {
+      id: 1,
+      label: Translator('Food.Category.Light'),
+      icon: 'smile',
+      checked: false,
+    },
+    {
+      id: 2,
+      label: Translator('Food.Category.Moderate'),
+      icon: 'exclamation-triangle',
+      checked: false,
+    },
+    {
+      id: 3,
+      label: Translator('Food.Category.Heavy'),
+      icon: 'sad-tear',
+      checked: false,
+    },
+  ];
 
   useEffect(() => {
     setCurrentDate(dayjsHandler.format());
@@ -75,14 +101,16 @@ const AddFoodRegistry = ({handleClose}) => {
     setShow(false);
 
     if (foodCategory === undefined)
-      fieldsWithError.push('Alimentação (leve/moderada/pesada)');
-    if (foodName === '') fieldsWithError.push('O que comeu?');
-    if (foodKcal === '') fieldsWithError.push('Quantas calorias?');
+      fieldsWithError.push(Translator('Food.Category.FullLabelAllTypes'));
+    if (foodName === '') fieldsWithError.push(labelWhatDoYouEat);
+    if (foodKcal === '') fieldsWithError.push(labelHowManyCalories);
 
     if (fieldsWithError.length > 0) {
       Alert.alert(
-        'Atenção',
-        `Você precisa preencher os campos:\n\n${fieldsWithError.join('\n')}`,
+        Translator('Alert.Warning'),
+        `${Translator(
+          'Alert.Message.NeedFillTheFields',
+        )}\n\n${fieldsWithError.join('\n')}`,
       );
 
       return false;
@@ -169,16 +197,20 @@ const AddFoodRegistry = ({handleClose}) => {
             </CloseIconBox>
           </HeaderIcons>
           <MainTitle>
-            {editableItem === undefined ? 'Novo Registro' : 'Editando Registro'}
+            {editableItem === undefined
+              ? Translator('NewRegistry.New.Title')
+              : Translator('NewRegistry.Edit.Title')}
           </MainTitle>
           <Subtitle>
             {editableItem === undefined
-              ? 'Adicione um registro alimentar ao seu histórico.'
-              : 'Modifique o que precisar e não esqueça de salvar.'}
+              ? Translator('NewRegistry.New.Description')
+              : Translator('NewRegistry.Edit.Description')}
           </Subtitle>
 
           <FormContainer>
-            <FormLabelControl>Como classificaria?</FormLabelControl>
+            <FormLabelControl
+              text={Translator('NewRegistry.Fields.WhichCategory')}
+            />
             <FoodCategorySelector
               arrOptions={FoodCategoryOptions}
               handleChange={newValue => setFoodCategory(newValue)}
@@ -186,7 +218,7 @@ const AddFoodRegistry = ({handleClose}) => {
 
             <TextInputCustom
               value={foodName}
-              label="O que comeu ?"
+              label={labelWhatDoYouEat}
               placeholder="Ex: Strogonoff"
               onChange={text => setFoodName(text)}
               handleIconFunction={() => setFoodName('')}
@@ -194,7 +226,7 @@ const AddFoodRegistry = ({handleClose}) => {
 
             <TextInputCustom
               value={foodKcal}
-              label="Quantas calorias ?"
+              label={labelHowManyCalories}
               placeholder="Ex: 294"
               keyboardType="numeric"
               onChange={text => setFoodKcal(text)}
@@ -202,7 +234,7 @@ const AddFoodRegistry = ({handleClose}) => {
             />
 
             <TextInputCustom
-              label="Em que momento ?"
+              label={Translator('NewRegistry.Fields.WhichMoment')}
               value={dayjs(currentDate).locale('pt').format('LT')}
               renderAsDateTimePicker
               handleIconFunction={() => setShow(true)}
@@ -210,7 +242,7 @@ const AddFoodRegistry = ({handleClose}) => {
 
             <ButtonsContainer>
               <ButtonDefault
-                text="Salvar Registro"
+                text={Translator('Buttons.SaveRegistry')}
                 onPress={handleSaveFoodRegistry}
               />
             </ButtonsContainer>

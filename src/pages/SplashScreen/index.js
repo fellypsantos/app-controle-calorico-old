@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {ActivityIndicator} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
@@ -13,8 +13,10 @@ import {
 
 import DataBase from '../../DataBase';
 import AppLogoSource from '../../../assets/images/eating.png';
+import {ProfileContext} from '../../Contexts/ProfileContext';
 
 const SplashScreen = ({navigation}) => {
+  const {Translator} = useContext(ProfileContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -46,14 +48,12 @@ const SplashScreen = ({navigation}) => {
         <ActivityIndicator color="#FFF" size={25} />
       ) : (
         <>
-          <AppTitle>Controle de Calorias</AppTitle>
+          <AppTitle>{Translator('App.Name')}</AppTitle>
           <AppLogo source={AppLogoSource} />
-          <AppDescription>
-            Você tem nas mãos um controle simples e prático da sua alimentação.
-          </AppDescription>
+          <AppDescription>{Translator('App.Description')}</AppDescription>
 
           <AppStart onPress={() => navigation.navigate('SplashSettings')}>
-            <AppStartText>Começar Agora</AppStartText>
+            <AppStartText>{Translator('Buttons.StartNow')}</AppStartText>
           </AppStart>
         </>
       )}

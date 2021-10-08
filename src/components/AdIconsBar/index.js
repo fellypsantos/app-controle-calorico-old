@@ -17,7 +17,7 @@ const adUnitId = {
 
 const AdIconsBar = () => {
   const navigation = useNavigation();
-  const {isPremiumTime} = useContext(ProfileContext);
+  const {isPremiumTime, Translator} = useContext(ProfileContext);
   const [isLoadingAd, setLoadingAd] = useState(false);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const AdIconsBar = () => {
     AdMobInterstitial.addEventListener('adClosed', () => {
       console.log('AdMobInterstitial CLOSED!');
       Toaster.ShowToast(
-        'O desenvolvedor agradece demais a sua generosidade <3',
+        Translator('Toast.DeveloperIsHappy'),
         'LONG',
       );
     });

@@ -3,6 +3,7 @@ import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
+import './src/i18n';
 import DataBase from './src/DataBase';
 import ProfileProvider from './src/Contexts/ProfileContext';
 import MainContainer from './src/components/MainContainer';

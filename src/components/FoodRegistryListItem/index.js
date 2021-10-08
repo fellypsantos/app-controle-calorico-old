@@ -1,5 +1,4 @@
-import React from 'react';
-import {NativeModules} from 'react-native';
+import React, {useContext} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import dayjs from 'dayjs';
 import Colors from '../../Colors';
@@ -15,6 +14,7 @@ import {
   RegistryDataContainer,
 } from './styles';
 import DeviceLocaleHandler from '../../DeviceLocaleHandler';
+import {ProfileContext} from '../../Contexts/ProfileContext';
 
 const TimeIcons = {
   sunrise: require('../../../assets/images/sunrise.png'),
@@ -23,12 +23,13 @@ const TimeIcons = {
 };
 
 const FoodRegistryListItem = ({foodInformations}) => {
+  const {Translator} = useContext(ProfileContext);
   const {name, kcal, category_level, datetime_moment} = foodInformations;
 
   const parseCategoryLevelToText = () => {
-    if (category_level === 1) return 'Alimentação Leve';
-    if (category_level === 2) return 'Alimentação Moderada';
-    if (category_level === 3) return 'Alimentação Pesada';
+    if (category_level === 1) return Translator('Food.Light');
+    if (category_level === 2) return Translator('Food.Moderate');
+    if (category_level === 3) return Translator('Food.Heavy');
   };
 
   const parseCategoryLevelToIcon = () => {

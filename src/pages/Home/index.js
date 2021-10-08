@@ -26,9 +26,13 @@ import AdModRewardIntro from '../AdMobRewardIntro';
 const Stack = createStackNavigator();
 
 const MainSection = ({navigation}) => {
-  const {theFoodHistory, setFoodHistory, getDeviceLocale} = useContext(
-    ProfileContext,
-  );
+  const {
+    theFoodHistory,
+    setFoodHistory,
+    getDeviceLocale,
+    Translator,
+  } = useContext(ProfileContext);
+
   const isEmptyFoodList = theFoodHistory.length > 0;
 
   const handleDeleteListItem = itemToDelete => {
@@ -43,16 +47,23 @@ const MainSection = ({navigation}) => {
         );
         setFoodHistory(updatedList);
 
-        Toaster.ShowToast('Item removido com sucesso', 'SHORT');
+        Toaster.ShowToast(Translator('Toast.ItemRemoved'), 'SHORT');
       }
     });
   };
 
   const handleConfirmDeleteListItem = item => {
-    Alert.alert('Cuidado', 'Quer mesmo remover esse item ?', [
-      {text: 'Cancelar', onPress: () => null},
-      {text: 'Sim, quero apagar', onPress: () => handleDeleteListItem(item)},
-    ]);
+    Alert.alert(
+      Translator('Alert.Caution'),
+      Translator('Alert.Message.ConfirmRemoveItem'),
+      [
+        {text: Translator('Modal.Button.Cancel'), onPress: () => null},
+        {
+          text: Translator('Modal.Button.YesWantDelete'),
+          onPress: () => handleDeleteListItem(item),
+        },
+      ],
+    );
   };
 
   const handleEditListitem = itemToEdit => {
@@ -64,14 +75,21 @@ const MainSection = ({navigation}) => {
     const theMoment = dayjs(item.datetime_moment).locale(getDeviceLocale);
 
     Alert.alert(
-      'Detalhes do Registro',
-      `Nome: ${item.name}\nCalorias: ${
-        item.kcal
-      } kcal\nData: ${theMoment.format('LL')}\nHora: ${theMoment.format('LT')}`,
+      Translator('Modal.Title.RegistryDetails'),
+      `${Translator('Modal.Label.Name')}: ${item.name}
+${Translator('Modal.Label.Calories')}: ${item.kcal} kcal
+${Translator('Modal.Label.Date')}: ${theMoment.format('LL')}
+${Translator('Modal.Label.Hour')}: ${theMoment.format('LT')}`,
       [
-        {text: 'Excluir', onPress: () => handleConfirmDeleteListItem(item)},
-        {text: 'Editar', onPress: () => handleEditListitem(item)},
-        {text: 'Fechar', onPress: () => {}},
+        {
+          text: Translator('Modal.Button.Delete'),
+          onPress: () => handleConfirmDeleteListItem(item),
+        },
+        {
+          text: Translator('Modal.Button.Edit'),
+          onPress: () => handleEditListitem(item),
+        },
+        {text: Translator('Modal.Button.Close'), onPress: () => {}},
       ],
     );
   };
@@ -108,8 +126,10 @@ const AddFoodRegistrySection = ({navigation}) => (
 );
 
 const Home = () => {
+  const {Translator} = useContext(ProfileContext);
+
   useEffect(() => {
-    Toaster.ShowToast('Olá! Bom te ver por aqui.', 'SHORT');
+    Toaster.ShowToast(Translator('Toast.Welcome'), 'SHORT');
     DataBase.getProfileData();
   }, []);
 

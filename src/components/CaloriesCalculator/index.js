@@ -4,7 +4,7 @@ import {Container, ContainerKcalInfo, KcalLabel, KcalValue} from './styles';
 import {ProfileContext} from '../../Contexts/ProfileContext';
 
 const CaloriesCalculator = () => {
-  const {theProfile, theFoodHistory} = useContext(ProfileContext);
+  const {theProfile, theFoodHistory, Translator} = useContext(ProfileContext);
   const [BEEValue, setBEEValue] = useState(0);
   const [kcalSum, setKcalSum] = useState(0);
 
@@ -30,24 +30,23 @@ const CaloriesCalculator = () => {
       setKcalSum(tempKcalSum);
       return item;
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theFoodHistory]);
 
   return (
     <Container>
       <ContainerKcalInfo>
         <KcalValue>1200</KcalValue>
-        <KcalLabel>Mínimo</KcalLabel>
+        <KcalLabel>{Translator('Min')}</KcalLabel>
       </ContainerKcalInfo>
 
       <ContainerKcalInfo isMiddle>
         <KcalValue isMiddle>{kcalSum}</KcalValue>
-        <KcalLabel>Consumido (KCal)</KcalLabel>
+        <KcalLabel>{Translator('Consumed')} (KCal)</KcalLabel>
       </ContainerKcalInfo>
 
       <ContainerKcalInfo>
         <KcalValue>{BEEValue}</KcalValue>
-        <KcalLabel>Máximo</KcalLabel>
+        <KcalLabel>{Translator('Max')}</KcalLabel>
       </ContainerKcalInfo>
     </Container>
   );

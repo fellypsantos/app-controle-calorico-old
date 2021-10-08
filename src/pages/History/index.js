@@ -17,7 +17,9 @@ import {
 } from './styles';
 
 const History = () => {
-  const {dateInHistoryTab, theFoodHistory} = useContext(ProfileContext);
+  const {dateInHistoryTab, theFoodHistory, Translator} = useContext(
+    ProfileContext,
+  );
   const [foodListHistoryTab, setFoodListHistoryTab] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [kcalTotalValue, setKcalTotalValue] = useState(0);
@@ -69,7 +71,7 @@ const History = () => {
           />
           <KcalSumContainer>
             <KcalSumText>
-              Total calórico da lista é de {kcalTotalValue} Kcal
+              {Translator('TotalCaloriesInList')} {kcalTotalValue} Kcal
             </KcalSumText>
           </KcalSumContainer>
         </>
