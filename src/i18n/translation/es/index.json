@@ -8,17 +8,30 @@
   },
   "Alert": {
     "Caution": "Precaución",
+    "Congratulations": "Felicidades",
     "Message": {
       "ConfirmRemoveItem": "¿Realmente quieres eliminar este elemento?",
+      "EnjoyPremiumTime": "Disfruta de la aplicación sin publicidad durante 4 horas.",
       "FailedToLoadAd": "No se pudo cargar la publicidad, pero puede intentarlo de nuevo.",
       "FillCorrectlyFieldsBelow": "Por favor, complete correctamente los campos a continuación.",
-      "NeedFillTheFields": "Necesitas llenar los campos:"
+      "NeedFillTheFields": "Necesitas llenar los campos:",
+      "RewardNotReceived": "Recompensa no recibida, inténtelo de nuevo.",
+      "ThanksForSupport": "El desarrollador agradece su apoyo.",
+      "VideoStopedBeforeEnds": "El video fue interrumpido antes de que termine :("
     },
-    "Warning": "Atención"
+    "Thanks": "¡Muchas gracias!",
+    "Warning": "Atención",
+    "WhatAPity": "Qué pena..."
   },
   "App": {
     "Description": "Tienes en tus manos un sencillo y práctico control de tus comidas.",
     "Name": "Contador de Calorías"
+  },
+  "BlockOption": {
+    "Support": {
+      "Description": "¿Te gustó la aplicación? Apoyar el desarrollo del proyecto viendo una publicidad.",
+      "Title": "Apoyo"
+    }
   },
   "BottomTab": {
     "History": "Histórico",

@@ -22,6 +22,7 @@ import FoodRegistryListItem from '../../components/FoodRegistryListItem';
 import Toaster from '../../Toaster';
 import {ProfileContext} from '../../Contexts/ProfileContext';
 import AdModRewardIntro from '../AdMobRewardIntro';
+import BlockOption from '../../components/BlockOption';
 
 const Stack = createStackNavigator();
 
@@ -117,6 +118,9 @@ ${Translator('Modal.Label.Hour')}: ${theMoment.format('LT')}`,
           ))}
         </ListContainer>
       </BottomContainer>
+
+      {/* BLOCK */}
+      <BlockOption />
     </ScrollViewContainer>
   );
 };

@@ -9,11 +9,7 @@ import {ProfileContext} from '../../Contexts/ProfileContext';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Toaster from '../../Toaster';
 import Colors from '../../Colors';
-
-const adUnitId = {
-  DEBUG: 'ca-app-pub-3940256099942544/1033173712',
-  RELEASE: 'ca-app-pub-3444194669126701/6444212865',
-};
+import AdMobUnit from '../../AdMobUnit';
 
 const AdIconsBar = () => {
   const navigation = useNavigation();
@@ -21,26 +17,19 @@ const AdIconsBar = () => {
   const [isLoadingAd, setLoadingAd] = useState(false);
 
   useEffect(() => {
-    AdMobInterstitial.setAdUnitID(__DEV__ ? adUnitId.DEBUG : adUnitId.RELEASE);
+    AdMobInterstitial.setAdUnitID(AdMobUnit.Interstitial.Premium);
     AdMobInterstitial.removeAllListeners();
 
     AdMobInterstitial.addEventListener('adClosed', () => {
       console.log('AdMobInterstitial CLOSED!');
-      Toaster.ShowToast(
-        Translator('Toast.DeveloperIsHappy'),
-        'LONG',
-      );
+      Toaster.ShowToast(Translator('Toast.DeveloperIsHappy'), 'LONG');
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInterstitialError = error => {
     console.warn('handleInterstitialError', error);
-
-    Alert.alert(
-      'Ops...',
-      'Não foi possível carregar uma propaganda agora, mas você pode tentar novamente.',
-    );
+    Alert.alert('Ops!', Translator('Alert.Message.FailedToLoadAd'));
   };
 
   const handleShowAd = () => {

@@ -8,17 +8,30 @@
   },
   "Alert": {
     "Caution": "Caution",
+    "Congratulations": "Congratulations!",
     "Message": {
       "ConfirmRemoveItem": "Really want to remove this item?",
+      "EnjoyPremiumTime": "Enjoy the app without advertising for 4 hours.",
       "FailedToLoadAd": "Failed to load the advertising, but you can try again.",
       "FillCorrectlyFieldsBelow": "Please, fill correctly the fields below.",
-      "NeedFillTheFields": "You need fill the fields:"
+      "NeedFillTheFields": "You need fill the fields:",
+      "RewardNotReceived": "Reward not received, try again.",
+      "ThanksForSupport": "Developer appreciate you support.",
+      "VideoStopedBeforeEnds": "Video was interrupted before ends :("
     },
-    "Warning": "Attention"
+    "Thanks": "Thank you so much!",
+    "Warning": "Attention",
+    "WhatAPity": "What a pity..."
   },
   "App": {
     "Description": "You have in your hands a simple and practical control of your meals.",
     "Name": "Calories Counter"
+  },
+  "BlockOption": {
+    "Support": {
+      "Description": "Did you like the app? Support project development watching an advertising.",
+      "Title": "Support"
+    }
   },
   "BottomTab": {
     "History": "Historic",
@@ -125,7 +138,7 @@
   },
   "Toast": {
     "DateReturnedToToday": "Great! Date returned to today.",
-    "DeveloperIsHappy": "O developer thanks you for your generosity <3",
+    "DeveloperIsHappy": "The developer thanks you for your generosity <3",
     "InformationsUpdated": "Your informations were updated.",
     "ItemRemoved": "Item successfully removed.",
     "Welcome": "Hi! Good to see you here."

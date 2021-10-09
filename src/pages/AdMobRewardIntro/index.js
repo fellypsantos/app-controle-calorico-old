@@ -17,11 +17,7 @@ import {
   ActionButtonText,
 } from './styles';
 import Colors from '../../Colors';
-
-const adUnitId = {
-  DEBUG: 'ca-app-pub-3940256099942544/5224354917',
-  RELEASE: 'ca-app-pub-3444194669126701/9826012534',
-};
+import AdMobUnit from '../../AdMobUnit';
 
 const AdModRewardIntro = () => {
   const navigation = useNavigation();
@@ -33,7 +29,7 @@ const AdModRewardIntro = () => {
 
   useEffect(() => {
     // Display a rewarded ad
-    AdMobRewarded.setAdUnitID(__DEV__ ? adUnitId.DEBUG : adUnitId.RELEASE);
+    AdMobRewarded.setAdUnitID(AdMobUnit.Rewarded.Premium);
     AdMobRewarded.removeAllListeners();
 
     // INFORM THE STATE THE REWARD WAS RECEIVED
@@ -57,16 +53,16 @@ const AdModRewardIntro = () => {
 
           // Show Alert and close window
           Alert.alert(
-            'Parabéns!',
-            'Aproveite o app sem propagandas por 4 horas.',
+            Translator('Alert.Congratulations'),
+            Translator('Alert.Message.EnjoyPremiumTime'),
             [{text: 'OK', onPress: () => navigation.goBack()}],
           );
         });
       } else {
         console.log('AdMobRewarded video was closed before ends :(');
         Alert.alert(
-          'Poxa...',
-          'A recompensa não foi recebida, tente novamente.',
+          Translator('Alert.Warning'),
+          Translator('Alert.Message.RewardNotReceived'),
         );
       }
     });
