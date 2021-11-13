@@ -1,5 +1,5 @@
 import React, {useEffect, useContext} from 'react';
-import {Alert} from 'react-native';
+import {Alert, Linking} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import ScrollViewContainer from '../../components/ScrollViewContainer';
@@ -120,7 +120,13 @@ ${Translator('Modal.Label.Hour')}: ${theMoment.format('LT')}`,
       </BottomContainer>
 
       {/* BLOCK */}
-      <BlockOption />
+      <BlockOption
+        handleOnPress={() => {
+          Linking.openURL(
+            'https://play.google.com/store/apps/developer?id=Fellyp+Santos',
+          );
+        }}
+      />
     </ScrollViewContainer>
   );
 };

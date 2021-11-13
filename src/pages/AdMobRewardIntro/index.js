@@ -71,7 +71,7 @@ const AdModRewardIntro = () => {
 
   const handleAdMobRewardedError = error => {
     console.log('AdMobRewarded request error!', error);
-    Alert.alert('Ops!', 'Alert.Message.FailedToLoadAd');
+    Alert.alert('Ops!', Translator('Alert.Message.FailedToLoadAd'));
   };
 
   const handleShowRewardAd = () => {

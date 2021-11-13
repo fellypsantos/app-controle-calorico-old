@@ -28,9 +28,11 @@
     "Name": "Calories Counter"
   },
   "BlockOption": {
-    "Support": {
-      "Description": "Did you like the app? Support project development watching an advertising.",
-      "Title": "Support"
+    "Developer": {
+      "MoreApps": {
+        "Description": "Click here to check the developer's app catalog.",
+        "Title": "More apps"
+      }
     }
   },
   "BottomTab": {

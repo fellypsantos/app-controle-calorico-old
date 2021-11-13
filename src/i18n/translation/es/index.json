@@ -28,9 +28,11 @@
     "Name": "Contador de Calorías"
   },
   "BlockOption": {
-    "Support": {
-      "Description": "¿Te gustó la aplicación? Apoyar el desarrollo del proyecto viendo una publicidad.",
-      "Title": "Apoyo"
+    "Developer": {
+      "MoreApps": {
+        "Description": "Haga clic aquí para ver el catálogo de aplicaciones del desarrollador.",
+        "Title": "Más aplicaciones"
+      }
     }
   },
   "BottomTab": {
