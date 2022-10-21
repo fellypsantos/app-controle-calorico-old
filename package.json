@@ -27,7 +27,7 @@
     "react-native-gesture-handler": "^1.10.3",
     "react-native-locale-detector": "^1.0.1",
     "react-native-push-notification": "^7.4.0",
-    "react-native-reanimated": "^2.2.0",
+    "react-native-reanimated": "^2.10.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.4.0",
     "react-native-sqlite-storage": "^5.0.0",
