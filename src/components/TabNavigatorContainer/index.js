@@ -1,19 +1,20 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Home from '../../pages/Home';
 import History from '../../pages/History';
 import Settings from '../../pages/Settings';
 import Colors from '../../Colors';
+import CustomTabBarNavigation from '../CustomTabBarNavigation';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {ProfileContext} from '../../Contexts/ProfileContext';
+import { ProfileContext } from '../../Contexts/ProfileContext';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigatorContainer = () => {
-  const {Translator} = useContext(ProfileContext);
+  const { Translator } = useContext(ProfileContext);
   const tabBarOptions = {
     activeTintColor: Colors.Purple.Idle,
     activeBackgroundColor: '#fff',
@@ -22,8 +23,8 @@ const TabNavigatorContainer = () => {
     inactiveTintColor: 'gray',
   };
 
-  const screenOptions = ({route}) => ({
-    tabBarIcon: ({focused, color, size}) => {
+  const screenOptions = ({ route }) => ({
+    tabBarIcon: ({ focused, color, size }) => {
       let iconName;
 
       if (route.name === 'Home') {
@@ -41,26 +42,27 @@ const TabNavigatorContainer = () => {
 
   return (
     <Tab.Navigator
+      tabBar={(props) => <CustomTabBarNavigation {...props} />}
       screenOptions={screenOptions}
       tabBarOptions={tabBarOptions}
       initialRouteName={'Home'}>
       <Tab.Screen
         name="Home"
         component={Home}
-        options={{tabBarLabel: Translator('BottomTab.Home')}}
+        options={{ tabBarLabel: Translator('BottomTab.Home') }}
       />
 
       <Tab.Screen
         name="History"
         component={History}
-        options={{tabBarLabel: Translator('BottomTab.History')}}
+        options={{ tabBarLabel: Translator('BottomTab.History') }}
       />
 
       <Tab.Screen
         name="Settings"
         component={Settings}
-        options={{tabBarLabel: Translator('BottomTab.Settings')}}
-        initialParams={{isFirstRun: false}}
+        options={{ tabBarLabel: Translator('BottomTab.Settings') }}
+        initialParams={{ isFirstRun: false }}
       />
     </Tab.Navigator>
   );
