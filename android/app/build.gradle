@@ -135,8 +135,8 @@ android {
         applicationId "com.santos.fellyp.contadorcalorias"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 15728656
-        versionName "2.5"
+        versionCode 15728657
+        versionName "2.6"
     }
     splits {
         abi {
