@@ -1,15 +1,15 @@
-import React, {createContext, useState, useEffect} from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import Database from '../DataBase';
 import DeviceLocaleHandler from '../DeviceLocaleHandler';
 
 // Multilanguage implementation
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 export const ProfileContext = createContext();
 
-const ProfileProvider = ({children}) => {
-  const {t: Translator} = useTranslation();
+const ProfileProvider = ({ children }) => {
+  const { t: Translator } = useTranslation();
 
   const [theProfile, setProfile] = useState({
     name: '',
@@ -37,14 +37,14 @@ const ProfileProvider = ({children}) => {
 
       if (lastTimeStamp !== '0') {
         const minutes = dayjs().diff(lastTimeStamp, 'minutes');
-        console.log('[MINUTES PREMIUM PASSED]: ', minutes);
+        if (__DEV__) console.log('[MINUTES PREMIUM PASSED]: ', minutes);
 
-        // 240 min -> 4h
-        if (minutes < 240) {
-          // console.log('PREMIUM IS ENABLED! NO ADS!');
+        // 480 min -> 8h
+        if (minutes < 480) {
+          if (__DEV__) console.log('PREMIUM IS ENABLED! NO ADS!');
           setIsPremiumTime(true);
         } else {
-          // console.log('ADS WILL SHOWN NORMALLY!');
+          if (__DEV__) console.log('ADS WILL SHOWN NORMALLY!');
           setIsPremiumTime(false);
         }
       }
@@ -112,7 +112,7 @@ const ProfileProvider = ({children}) => {
       const theIntervalHandler = setInterval(() => {
         // Checking premium expiration time
         handleAdMobVisibility();
-      }, 5000);
+      }, 60 * 1000);
       setIntervalHandler(theIntervalHandler);
     } else if (!isPremiumTime && intervalHandler !== null) {
       clearInterval(intervalHandler);
