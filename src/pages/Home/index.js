@@ -1,6 +1,6 @@
-import React, {useEffect, useContext} from 'react';
-import {Alert, Linking} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
+import React, { useEffect, useContext } from 'react';
+import { Alert, Linking } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import ScrollViewContainer from '../../components/ScrollViewContainer';
 
@@ -20,13 +20,13 @@ import NoFoodRegistry from '../../components/NoFoodRegistry';
 import AddFoodRegistry from '../../components/AddFoodRegistry';
 import FoodRegistryListItem from '../../components/FoodRegistryListItem';
 import Toaster from '../../Toaster';
-import {ProfileContext} from '../../Contexts/ProfileContext';
+import { ProfileContext } from '../../Contexts/ProfileContext';
 import AdModRewardIntro from '../AdMobRewardIntro';
 import BlockOption from '../../components/BlockOption';
 
 const Stack = createStackNavigator();
 
-const MainSection = ({navigation}) => {
+const MainSection = ({ navigation }) => {
   const {
     theFoodHistory,
     setFoodHistory,
@@ -58,7 +58,7 @@ const MainSection = ({navigation}) => {
       Translator('Alert.Caution'),
       Translator('Alert.Message.ConfirmRemoveItem'),
       [
-        {text: Translator('Modal.Button.Cancel'), onPress: () => null},
+        { text: Translator('Modal.Button.Cancel'), onPress: () => null },
         {
           text: Translator('Modal.Button.YesWantDelete'),
           onPress: () => handleDeleteListItem(item),
@@ -90,7 +90,7 @@ ${Translator('Modal.Label.Hour')}: ${theMoment.format('LT')}`,
           text: Translator('Modal.Button.Edit'),
           onPress: () => handleEditListitem(item),
         },
-        {text: Translator('Modal.Button.Close'), onPress: () => {}},
+        { text: Translator('Modal.Button.Close'), onPress: () => { } },
       ],
     );
   };
@@ -123,7 +123,7 @@ ${Translator('Modal.Label.Hour')}: ${theMoment.format('LT')}`,
       <BlockOption
         handleOnPress={() => {
           Linking.openURL(
-            'https://play.google.com/store/apps/developer?id=Fellyp+Santos',
+            'https://play.google.com/store/apps/dev?id=4983605265674024761',
           );
         }}
       />
@@ -131,12 +131,12 @@ ${Translator('Modal.Label.Hour')}: ${theMoment.format('LT')}`,
   );
 };
 
-const AddFoodRegistrySection = ({navigation}) => (
+const AddFoodRegistrySection = ({ navigation }) => (
   <AddFoodRegistry handleClose={() => navigation.goBack()} />
 );
 
 const Home = () => {
-  const {Translator} = useContext(ProfileContext);
+  const { Translator } = useContext(ProfileContext);
 
   useEffect(() => {
     Toaster.ShowToast(Translator('Toast.Welcome'), 'SHORT');
