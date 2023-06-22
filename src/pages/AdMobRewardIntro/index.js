@@ -1,12 +1,12 @@
-import React, {useState, useEffect, useContext, useRef} from 'react';
-import {Alert, ActivityIndicator} from 'react-native';
-import {AdMobRewarded} from 'react-native-admob';
-import {useNavigation} from '@react-navigation/native';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { Alert, ActivityIndicator } from 'react-native';
+import { useRewardedAd } from '@react-native-admob/admob';
+import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import ConfettiCannon from 'react-native-confetti-cannon';
 
 import DataBase from '../../DataBase';
-import {ProfileContext} from '../../Contexts/ProfileContext';
+import { ProfileContext } from '../../Contexts/ProfileContext';
 
 import {
   Container,
@@ -22,52 +22,50 @@ import AdMobUnit from '../../AdMobUnit';
 const AdModRewardIntro = () => {
   const navigation = useNavigation();
   const [userRewarded, setUserRewarded] = useState(false);
-  const [isLoadingAd, setLoadingAd] = useState(false);
+  const [isLoadingAd, setLoadingAd] = useState(true);
   const confettiCannon = useRef();
 
-  const {setIsPremiumTime, Translator} = useContext(ProfileContext);
+  const { setIsPremiumTime, Translator } = useContext(ProfileContext);
+
+  const { adLoaded, adDismissed, show, reward } = useRewardedAd(
+    AdMobUnit.Rewarded.Premium
+  );
 
   useEffect(() => {
-    // Display a rewarded ad
-    AdMobRewarded.setAdUnitID(AdMobUnit.Rewarded.Premium);
-    AdMobRewarded.removeAllListeners();
 
-    // INFORM THE STATE THE REWARD WAS RECEIVED
-    AdMobRewarded.addEventListener('rewarded', reward => {
-      console.log('AdMobRewarded -> REWARDED!');
+    if (adLoaded) {
+      setLoadingAd(false);
+      console.log('nice, ad was loaded');
+    }
+
+  }, [adLoaded]);
+
+  useEffect(() => {
+
+    console.log('adDismissed with this reward value: ', reward);
+
+    if (adDismissed && reward !== undefined) {
+      if (__DEV__) console.log('COOOL! Ads were disabled for 8 hours!');
+
       setUserRewarded(true);
-    });
 
-    // WHEN VIDEO IS CLOSED, CHECK IF WAS REWARDED
-    AdMobRewarded.addEventListener('adClosed', result => {
-      if (userRewarded) {
-        console.log('COOOL! Ads were disabled for 4 hours!');
+      // Update Database
+      DataBase.setLastSeenRewardAd(dayjs().format(), lastTimeStamp => {
+        console.log('DataBase.setLastSeenRewardAd', lastTimeStamp);
 
-        // Update Database
-        DataBase.setLastSeenRewardAd(dayjs().format(), lastTimeStamp => {
-          console.log('DataBase.setLastSeenRewardAd', lastTimeStamp);
+        // Update app to hide all ads
+        setIsPremiumTime(true);
+        confettiCannon.current.start();
 
-          // Update app to hide all ads
-          setIsPremiumTime(true);
-          confettiCannon.current.start();
-
-          // Show Alert and close window
-          Alert.alert(
-            Translator('Alert.Congratulations'),
-            Translator('Alert.Message.EnjoyPremiumTime'),
-            [{text: 'OK', onPress: () => navigation.goBack()}],
-          );
-        });
-      } else {
-        console.log('AdMobRewarded video was closed before ends :(');
+        // Show Alert and close window
         Alert.alert(
-          Translator('Alert.Warning'),
-          Translator('Alert.Message.RewardNotReceived'),
+          Translator('Alert.Congratulations'),
+          Translator('Alert.Message.EnjoyPremiumTime'),
+          [{ text: 'OK', onPress: () => navigation.goBack() }],
         );
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userRewarded]);
+      });
+    }
+  }, [adDismissed]);
 
   const handleAdMobRewardedError = error => {
     console.log('AdMobRewarded request error!', error);
@@ -75,13 +73,13 @@ const AdModRewardIntro = () => {
   };
 
   const handleShowRewardAd = () => {
-    console.log('AdMobRewarded is requesting a video...');
-    setLoadingAd(true);
+    if (!adLoaded) {
+      console.log('ad not loaded yet');
+      return;
+    }
 
-    AdMobRewarded.requestAd()
-      .then(() => AdMobRewarded.showAd())
-      .catch(handleAdMobRewardedError)
-      .finally(() => setLoadingAd(false));
+    if (adLoaded) show();
+
   };
 
   return (
@@ -90,7 +88,7 @@ const AdModRewardIntro = () => {
         ref={confettiCannon}
         count={50}
         autoStart={false}
-        origin={{x: -15, y: 0}}
+        origin={{ x: -15, y: 0 }}
       />
       <Title>{Translator('AdMob.Title.DisableAds')}</Title>
       <Subtitle>{Translator('AdMob.Paragraph1')}</Subtitle>
@@ -106,7 +104,7 @@ const AdModRewardIntro = () => {
           <ActivityIndicator
             color={Colors.Purple.Idle}
             size={25}
-            style={{paddingLeft: 30}}
+            style={{ paddingLeft: 30 }}
           />
         ) : (
           <ActionButton onPress={handleShowRewardAd}>
